@@ -5,7 +5,8 @@ import { event } from './event'
 import { partner } from './partner'
 import { ong } from './ong'
 import { teamMember } from './teamMember'
+import { homeMetrics } from './homeMetrics'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [area, project, event, partner, ong, teamMember],
+  types: [area, project, event, partner, ong, teamMember, homeMetrics],
 }

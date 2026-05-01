@@ -97,3 +97,14 @@ export interface TeamMember {
   instagram?: string
   area?: { _ref: string }
 }
+
+export interface HomeMetricItem {
+  label: string
+  value: string
+}
+
+export interface HomeMetrics {
+  _id: string
+  _type: 'homeMetrics'
+  manualStats?: HomeMetricItem[]
+}

@@ -1,5 +1,5 @@
 import { client } from './client'
-import { Project, Event, Partner, ONG, TeamMember, Area } from '@/types/sanity'
+import { Project, Event, Partner, ONG, TeamMember, Area, HomeMetrics, HomeMetricItem } from '@/types/sanity'
 
 // PROJETOS
 
@@ -123,4 +123,34 @@ export async function searchContent(searchTerm: string): Promise<
     *[_type == "ong" && (name match $search || description match $search)]
   ] | order(_createdAt desc)`
   return client.fetch(query, { search: `*${searchTerm}*` })
+}
+
+// HOME
+
+export async function getHomeMetrics(): Promise<HomeMetrics | null> {
+  const query = `*[_type == "homeMetrics"][0]`
+  return client.fetch(query)
+}
+
+export async function getHomeImpactNumbers(): Promise<HomeMetricItem[]> {
+  const query = `{
+    "projectCount": count(*[_type == "project"]),
+    "manualStats": *[_type == "homeMetrics"][0].manualStats
+  }`
+
+  const data = await client.fetch<{
+    projectCount: number
+    manualStats?: HomeMetricItem[]
+  }>(query)
+
+  const manualStats = data.manualStats ?? [
+    { label: 'Membros formados', value: '150+' },
+    { label: 'ONGs impactadas', value: '40+' },
+    { label: 'Voluntários envolvidos', value: '500+' },
+  ]
+
+  return [
+    { label: 'Projetos realizados', value: `${data.projectCount}` },
+    ...manualStats,
+  ]
 }
