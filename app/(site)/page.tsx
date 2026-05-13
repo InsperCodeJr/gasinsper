@@ -28,7 +28,7 @@ export default async function Home() {
       <section className="relative overflow-hidden border-b border-[#E5E5E5]">
         <ParallaxBackground speed={0.28}>
           <Image src="/insper.jpg" alt="" fill priority className="object-cover" />
-          <div className="absolute inset-0 bg-[#1A1A1A]/30" />
+          <div className="absolute inset-0 bg-[#1A1A1A]/65" />
         </ParallaxBackground>
 
         <div className="relative mx-auto w-full max-w-7xl px-4 pb-16 pt-20 sm:pb-20 sm:pt-24 sm:px-6 lg:pb-28 lg:pt-32 lg:px-8">
