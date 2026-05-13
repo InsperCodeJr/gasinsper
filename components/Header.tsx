@@ -39,7 +39,7 @@ export default async function Header() {
 
         <Link
           href="/como-fazer-parte"
-          className="hidden lg:inline-flex items-center rounded-none border border-[#BB0A24] bg-[#BB0A24] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#8F071B] hover:border-[#8F071B]"
+          className="hidden lg:inline-flex items-center rounded-none border border-[#BB0A24] bg-[#BB0A24] px-5 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#8F071B] hover:border-[#8F071B] hover:-translate-y-px active:translate-y-0"
         >
           Participe
         </Link>

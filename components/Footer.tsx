@@ -18,7 +18,7 @@ export default function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Marca */}
           <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2.5">
+            <Link href="/" className="group flex items-center gap-2.5">
               <Image
                 src="/logo.png"
                 alt="Logo do GAS"
@@ -26,7 +26,7 @@ export default function Footer() {
                 height={32}
                 className="h-8 w-8 object-contain brightness-0 invert"
               />
-              <span className="text-lg font-black tracking-tight">GAS</span>
+              <span className="text-lg font-black tracking-tight transition-colors duration-200 group-hover:text-[#BB0A24]">GAS</span>
             </Link>
             <p className="mt-4 text-sm leading-6 text-white/50">
               Grupo de Ação Social — organização estudantil do Insper dedicada ao impacto social por meio de projetos estruturados.

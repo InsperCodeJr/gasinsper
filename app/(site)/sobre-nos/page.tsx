@@ -2,32 +2,13 @@ import Image from "next/image";
 import { getAllAreas, getAllTeamMembers } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import VideoHero from "@/components/VideoHero";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const FALLBACK_AREAS = [
-  {
-    _id: "a1",
-    name: "Projetos Sociais",
-    description:
-      "Desenvolve e gerencia os projetos que atendem diretamente as ONGs parceiras e comunidades, coordenando equipes multidisciplinares para máximo impacto.",
-  },
-  {
-    _id: "a2",
-    name: "Parcerias e Relações",
-    description:
-      "Responsável por cultivar e expandir a rede de parceiros corporativos e institucionais que viabilizam as ações do GAS.",
-  },
-  {
-    _id: "a3",
-    name: "Gestão de Pessoas",
-    description:
-      "Cuida do recrutamento, desenvolvimento e engajamento dos membros, garantindo uma cultura organizacional forte e acolhedora.",
-  },
-  {
-    _id: "a4",
-    name: "Marketing e Comunicação",
-    description:
-      "Constrói e comunica a identidade do GAS, ampliando o alcance das iniciativas e fortalecendo a presença digital da organização.",
-  },
+  { _id: "a1", name: "Projetos Sociais", description: "Desenvolve e gerencia os projetos que atendem diretamente as ONGs parceiras e comunidades, coordenando equipes multidisciplinares para máximo impacto." },
+  { _id: "a2", name: "Parcerias e Relações", description: "Responsável por cultivar e expandir a rede de parceiros corporativos e institucionais que viabilizam as ações do GAS." },
+  { _id: "a3", name: "Gestão de Pessoas", description: "Cuida do recrutamento, desenvolvimento e engajamento dos membros, garantindo uma cultura organizacional forte e acolhedora." },
+  { _id: "a4", name: "Marketing e Comunicação", description: "Constrói e comunica a identidade do GAS, ampliando o alcance das iniciativas e fortalecendo a presença digital da organização." },
 ];
 
 const VALUES = [
@@ -41,24 +22,24 @@ const VALUES = [
 
 export default async function SobreNos() {
   const [areas, teamMembers] = await Promise.all([getAllAreas(), getAllTeamMembers()]);
-
   const displayAreas = areas.length >= 4 ? areas : FALLBACK_AREAS;
   const matrixMembers = teamMembers.filter((m) => m.isMatrix);
   const areaMembers = teamMembers.filter((m) => !m.isMatrix);
 
   return (
     <div className="bg-white text-[#1A1A1A]">
-      {/* HERO — Video Background */}
+
+      {/* ── HERO — Video ────────────────────────────── */}
       <VideoHero />
 
-      {/* SOBRE A ORGANIZAÇÃO */}
-      <section className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
-          <div>
+      {/* ── SOBRE A ORGANIZAÇÃO ─────────────────────── */}
+      <section className="border-b border-[#E5E5E5] py-20">
+        <div className="mx-auto grid w-full max-w-7xl gap-16 px-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8">
+          <ScrollReveal direction="left">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
               Sobre a Organização
             </p>
-            <h2 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl">
+            <h2 className="mt-4 text-3xl font-black leading-tight sm:text-4xl">
               O que é o GAS?
             </h2>
             <div className="mt-6 space-y-4 text-base leading-7 text-[#555555]">
@@ -72,200 +53,217 @@ export default async function SobreNos() {
                 Cada projeto é uma oportunidade de aprendizado mútuo: nossos membros desenvolvem competências de liderança e gestão enquanto geram valor concreto para as organizações e pessoas que apoiamos.
               </p>
             </div>
-          </div>
-          <div className="relative aspect-square overflow-hidden rounded-sm bg-[#F7F7F7]">
-            <Image
-              src="/insper.jpg"
-              alt="Membros do GAS em ação"
-              fill
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-[#BB0A24]/10 to-transparent" />
-          </div>
+          </ScrollReveal>
+
+          <ScrollReveal direction="right" delay={120}>
+            <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#F7F7F7] shadow-xl">
+              <Image
+                src="/insper.jpg"
+                alt="Membros do GAS em ação"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#BB0A24]/10 to-transparent" />
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
-      <div className="border-t border-[#E5E5E5]" />
-
-      {/* MISSÃO */}
-      <section className="bg-[#1A1A1A] py-20 text-white">
+      {/* ── MISSÃO ──────────────────────────────────── */}
+      <section className="border-b border-[#E5E5E5] bg-[#1A1A1A] py-20 text-white">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-[1fr_2fr] lg:items-start">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-                Nossa Missão
-              </p>
-              <div className="mt-4 h-0.5 w-12 bg-[#BB0A24]" />
+          <ScrollReveal direction="none">
+            <div className="grid gap-12 lg:grid-cols-[1fr_2fr] lg:items-start">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
+                  Nossa Missão
+                </p>
+                <div className="mt-4 h-0.5 w-12 bg-[#BB0A24]" />
+              </div>
+              <div>
+                <p className="text-2xl font-light leading-relaxed text-white/90 sm:text-3xl">
+                  &ldquo;Formar líderes comprometidos com o impacto social, conectando talento estudantil a causas reais por meio de projetos estruturados e parcerias de longo prazo.&rdquo;
+                </p>
+                <p className="mt-8 text-base leading-7 text-white/60">
+                  Acreditamos que a universidade é o momento ideal para desenvolver não apenas competências técnicas, mas também a consciência social e a capacidade de gerar mudança positiva no mundo.
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-2xl font-light leading-relaxed text-white/90 sm:text-3xl">
-                &ldquo;Formar líderes comprometidos com o impacto social, conectando talento estudantil a causas reais por meio de projetos estruturados e parcerias de longo prazo.&rdquo;
-              </p>
-              <p className="mt-8 text-base leading-7 text-white/60">
-                Acreditamos que a universidade é o momento ideal para desenvolver não apenas competências técnicas, mas também a consciência social e a capacidade de gerar mudança positiva no mundo.
-              </p>
-            </div>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
-      {/* VALORES */}
-      <section className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-          Nossos Valores
-        </p>
-        <h2 className="mt-4 text-3xl font-bold sm:text-4xl">O que nos guia</h2>
-        <div className="mt-12 grid gap-px border border-[#E5E5E5] sm:grid-cols-2 lg:grid-cols-3">
-          {VALUES.map((v) => (
-            <div key={v.title} className="border border-[#E5E5E5] p-8 bg-white hover:bg-[#F7F7F7] transition-colors">
-              <div className="h-0.5 w-8 bg-[#BB0A24]" />
-              <h3 className="mt-4 text-lg font-bold">{v.title}</h3>
-              <p className="mt-3 text-sm leading-6 text-[#555555]">{v.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <div className="border-t border-[#E5E5E5]" />
-
-      {/* FUNCIONAMENTO */}
-      <section className="bg-[#F7F7F7] py-20">
+      {/* ── VALORES ─────────────────────────────────── */}
+      <section className="border-b border-[#E5E5E5] py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-            Como Funcionamos
-          </p>
-          <h2 className="mt-4 text-3xl font-bold sm:text-4xl">Estrutura Organizacional</h2>
-          <div className="mt-8 max-w-3xl text-base leading-7 text-[#555555]">
-            <p>
-              O GAS é estruturado em torno de uma <strong className="text-[#1A1A1A]">matriz</strong> — responsável pela governança, estratégia e coordenação geral — e quatro <strong className="text-[#1A1A1A]">áreas principais</strong>, cada uma com autonomia para desenvolver suas iniciativas dentro da missão da organização.
+          <ScrollReveal direction="none">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
+              Nossos Valores
             </p>
-            <p className="mt-4">
-              Essa estrutura garante agilidade operacional sem abrir mão do alinhamento estratégico, permitindo que o GAS atue em múltiplas frentes simultaneamente com consistência e qualidade.
-            </p>
+            <h2 className="mt-4 text-3xl font-black sm:text-4xl">O que nos guia</h2>
+          </ScrollReveal>
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {VALUES.map((v, i) => (
+              <ScrollReveal key={v.title} direction="up" delay={i * 70}>
+                <div className="group h-full rounded-2xl border border-[#E5E5E5] bg-white p-7 shadow-sm transition-all duration-300 hover:border-[#BB0A24]/20 hover:shadow-md hover:-translate-y-0.5">
+                  <div className="h-0.5 w-8 bg-[#BB0A24] transition-all duration-300 group-hover:w-12" />
+                  <h3 className="mt-5 text-lg font-black">{v.title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-[#555555]">{v.description}</p>
+                </div>
+              </ScrollReveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 4 ÁREAS — 2x2 Grid */}
-      <section className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-          Nossas Áreas
-        </p>
-        <h2 className="mt-4 mb-10 text-3xl font-bold sm:text-4xl">As 4 Áreas do GAS</h2>
-        <div className="grid gap-0 border border-[#E5E5E5] sm:grid-cols-2">
-          {displayAreas.slice(0, 4).map((area, i) => (
-            <div
-              key={area._id}
-              className={`p-10 border-[#E5E5E5] ${i % 2 === 0 ? "border-r" : ""} ${i < 2 ? "border-b" : ""}`}
-            >
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#BB0A24] text-white font-bold text-sm">
-                {i + 1}
-              </div>
-              <h3 className="mt-4 text-xl font-bold">{area.name}</h3>
-              <p className="mt-3 text-sm leading-6 text-[#555555]">{area.description}</p>
+      {/* ── ESTRUTURA ───────────────────────────────── */}
+      <section className="border-b border-[#E5E5E5] bg-[#F9F9F9] py-20">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ScrollReveal direction="left">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
+              Como Funcionamos
+            </p>
+            <h2 className="mt-4 text-3xl font-black sm:text-4xl">Estrutura Organizacional</h2>
+            <div className="mt-6 max-w-3xl text-base leading-7 text-[#555555]">
+              <p>
+                O GAS é estruturado em torno de uma <strong className="text-[#1A1A1A]">matriz</strong> — responsável pela governança, estratégia e coordenação geral — e quatro <strong className="text-[#1A1A1A]">áreas principais</strong>, cada uma com autonomia para desenvolver suas iniciativas dentro da missão da organização.
+              </p>
+              <p className="mt-4">
+                Essa estrutura garante agilidade operacional sem abrir mão do alinhamento estratégico, permitindo que o GAS atue em múltiplas frentes simultaneamente com consistência e qualidade.
+              </p>
             </div>
-          ))}
+          </ScrollReveal>
         </div>
       </section>
 
-      <div className="border-t border-[#E5E5E5]" />
+      {/* ── 4 ÁREAS ─────────────────────────────────── */}
+      <section id="areas" className="scroll-mt-20 border-b border-[#E5E5E5] py-20">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ScrollReveal direction="none">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
+              Nossas Áreas
+            </p>
+            <h2 className="mt-4 text-3xl font-black sm:text-4xl">As 4 Áreas do GAS</h2>
+          </ScrollReveal>
 
-      {/* GESTÃO ATUAL */}
-      <section className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-          Gestão 2026
-        </p>
-        <h2 className="mt-4 text-3xl font-bold sm:text-4xl">Nossa Equipe</h2>
-
-        {teamMembers.length === 0 ? (
-          <p className="mt-8 text-[#555555]">
-            Os membros da gestão serão cadastrados em breve no Sanity Studio.
-          </p>
-        ) : (
-          <>
-            {/* Matrix members */}
-            {matrixMembers.length > 0 && (
-              <div className="mt-10">
-                <h3 className="mb-6 text-sm font-semibold uppercase tracking-widest text-[#555555]">Matriz</h3>
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {matrixMembers.map((member) => (
-                    <MemberCard key={member._id} member={member} />
-                  ))}
+          <div className="mt-10 grid gap-4 sm:grid-cols-2">
+            {displayAreas.slice(0, 4).map((area, i) => (
+              <ScrollReveal key={area._id} direction="up" delay={i * 80}>
+                <div className="group h-full rounded-2xl border border-[#E5E5E5] bg-white p-8 shadow-sm transition-all duration-300 hover:border-[#BB0A24]/20 hover:shadow-md hover:-translate-y-0.5">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#BB0A24] text-sm font-black text-white transition-transform duration-300 group-hover:scale-110">
+                    {i + 1}
+                  </div>
+                  <h3 className="mt-5 text-xl font-black">{area.name}</h3>
+                  <p className="mt-3 text-sm leading-6 text-[#555555]">{area.description}</p>
                 </div>
-              </div>
-            )}
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
 
-            {/* Area members grouped */}
-            {areaMembers.length > 0 && (
-              <div className="mt-12">
-                <h3 className="mb-6 text-sm font-semibold uppercase tracking-widest text-[#555555]">Áreas</h3>
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {areaMembers.map((member) => (
-                    <MemberCard key={member._id} member={member} showArea />
-                  ))}
+      {/* ── EQUIPE ──────────────────────────────────── */}
+      <section className="py-20">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ScrollReveal direction="none">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
+              Gestão 2026
+            </p>
+            <h2 className="mt-4 text-3xl font-black sm:text-4xl">Nossa Equipe</h2>
+          </ScrollReveal>
+
+          {teamMembers.length === 0 ? (
+            <p className="mt-8 text-[#555555]">
+              Os membros da gestão serão cadastrados em breve no Sanity Studio.
+            </p>
+          ) : (
+            <>
+              {matrixMembers.length > 0 && (
+                <div className="mt-12">
+                  <ScrollReveal direction="none">
+                    <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-[#555555]">Matriz</p>
+                  </ScrollReveal>
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {matrixMembers.map((member, i) => (
+                      <ScrollReveal key={member._id} direction="up" delay={i * 60}>
+                        <MemberCard member={member} />
+                      </ScrollReveal>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </>
-        )}
+              )}
+
+              {areaMembers.length > 0 && (
+                <div className="mt-14">
+                  <ScrollReveal direction="none">
+                    <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-[#555555]">Áreas</p>
+                  </ScrollReveal>
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {areaMembers.map((member, i) => (
+                      <ScrollReveal key={member._id} direction="up" delay={(i % 8) * 60}>
+                        <MemberCard member={member} showArea />
+                      </ScrollReveal>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </section>
     </div>
   );
 }
 
-function MemberCard({ member, showArea = false }: { member: Awaited<ReturnType<typeof getAllTeamMembers>>[number]; showArea?: boolean }) {
-  const photoUrl = member.photo ? urlFor(member.photo).width(400).height(400).fit("crop").url() : null;
+function MemberCard({
+  member,
+  showArea = false,
+}: {
+  member: Awaited<ReturnType<typeof getAllTeamMembers>>[number];
+  showArea?: boolean;
+}) {
+  const photoUrl = member.photo
+    ? urlFor(member.photo).width(400).height(400).fit("crop").url()
+    : null;
 
   return (
-    <div className="group border border-[#E5E5E5] bg-white hover:border-[#BB0A24] transition-colors">
+    <div className="group h-full overflow-hidden rounded-2xl border border-[#E5E5E5] bg-white shadow-sm transition-all duration-300 hover:border-[#BB0A24]/20 hover:shadow-md hover:-translate-y-0.5">
       <div className="relative aspect-square overflow-hidden bg-[#F7F7F7]">
         {photoUrl ? (
           <Image
             src={photoUrl}
             alt={member.name}
             fill
-            className="object-cover transition duration-300 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full items-center justify-center bg-gradient-to-br from-[#F7F7F7] to-[#E5E5E5]">
-            <span className="text-4xl font-bold text-[#BB0A24]/30">
+            <span className="text-5xl font-black text-[#BB0A24]/20">
               {member.name.charAt(0)}
             </span>
           </div>
         )}
       </div>
       <div className="p-4">
-        <h3 className="font-bold text-[#1A1A1A]">{member.name}</h3>
-        <p className="mt-0.5 text-sm text-[#BB0A24]">{member.position}</p>
+        <h3 className="font-black text-[#1A1A1A] leading-tight">{member.name}</h3>
+        <p className="mt-0.5 text-sm font-medium text-[#BB0A24]">{member.position}</p>
         {showArea && member.area && (
           <p className="mt-0.5 text-xs text-[#555555]">{member.area.name}</p>
         )}
-        <div className="mt-3 flex flex-wrap gap-2">
+        <div className="mt-3 flex flex-wrap gap-3">
           {member.email && (
-            <a
-              href={`mailto:${member.email}`}
-              className="text-xs text-[#555555] hover:text-[#BB0A24] transition-colors"
-            >
+            <a href={`mailto:${member.email}`} className="text-xs text-[#555555] transition-colors hover:text-[#BB0A24]">
               Email
             </a>
           )}
           {member.instagram && (
-            <a
-              href={`https://instagram.com/${member.instagram}`}
-              target="_blank"
-              rel="noreferrer"
-              className="text-xs text-[#555555] hover:text-[#BB0A24] transition-colors"
-            >
+            <a href={`https://instagram.com/${member.instagram}`} target="_blank" rel="noreferrer" className="text-xs text-[#555555] transition-colors hover:text-[#BB0A24]">
               @{member.instagram}
             </a>
           )}
           {member.linkedin && (
-            <a
-              href={member.linkedin}
-              target="_blank"
-              rel="noreferrer"
-              className="text-xs text-[#555555] hover:text-[#BB0A24] transition-colors"
-            >
+            <a href={member.linkedin} target="_blank" rel="noreferrer" className="text-xs text-[#555555] transition-colors hover:text-[#BB0A24]">
               LinkedIn
             </a>
           )}
