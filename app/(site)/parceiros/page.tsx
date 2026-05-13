@@ -36,7 +36,7 @@ export default async function Parceiros() {
     <div className="bg-white text-[#1A1A1A]">
 
       {/* ── HERO ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden border-b border-[#E5E5E5] bg-[#1A1A1A] py-28 text-white">
+      <section className="relative overflow-hidden border-b border-[#E5E5E5] bg-[#1A1A1A] py-20 sm:py-24 lg:py-28 text-white">
         <div
           className="pointer-events-none absolute left-1/2 top-0 h-64 w-96 -translate-x-1/2 opacity-20"
           style={{ background: "radial-gradient(ellipse at 50% 0%, #BB0A24 0%, transparent 70%)" }}
@@ -45,7 +45,7 @@ export default async function Parceiros() {
           <p className="animate-fade-in text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
             Parceiros
           </p>
-          <h1 className="animate-fade-in-up delay-100 mt-4 max-w-3xl text-4xl font-black leading-tight sm:text-5xl">
+          <h1 className="animate-fade-in-up delay-100 mt-4 max-w-3xl text-3xl font-black leading-tight sm:text-4xl lg:text-5xl">
             Juntos, ampliamos o impacto
           </h1>
           <p className="animate-fade-in-up delay-200 mt-6 max-w-2xl text-base leading-7 text-white/70">
@@ -55,7 +55,7 @@ export default async function Parceiros() {
       </section>
 
       {/* ── POR QUE, COMO, RETORNO ───────────────────── */}
-      <section className="border-b border-[#E5E5E5] py-20">
+      <section className="border-b border-[#E5E5E5] py-14 sm:py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-4 lg:grid-cols-3">
             {INFO_CARDS.map((item, i) => (
@@ -72,7 +72,7 @@ export default async function Parceiros() {
       </section>
 
       {/* ── PARCEIROS ATUAIS ─────────────────────────── */}
-      <section className="border-b border-[#E5E5E5] py-20">
+      <section className="border-b border-[#E5E5E5] py-14 sm:py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="none">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
@@ -137,7 +137,7 @@ export default async function Parceiros() {
       </section>
 
       {/* ── HISTÓRICO ────────────────────────────────── */}
-      <section className="border-b border-[#E5E5E5] bg-[#F9F9F9] py-20">
+      <section className="border-b border-[#E5E5E5] bg-[#F9F9F9] py-14 sm:py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="none">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
@@ -146,7 +146,7 @@ export default async function Parceiros() {
             <h2 className="mt-4 text-3xl font-black sm:text-4xl">Quem já caminhou conosco</h2>
           </ScrollReveal>
 
-          <ScrollReveal direction="up" delay={100} className="mt-10 flex flex-wrap gap-3">
+          <ScrollReveal direction="up" delay={100} className="mt-10 grid grid-cols-3 gap-3 sm:flex sm:flex-wrap sm:gap-3">
             {displayHistorical.map((partner) => {
               const logoUrl =
                 "logo" in partner && partner.logo
@@ -156,7 +156,7 @@ export default async function Parceiros() {
               return (
                 <div
                   key={partner._id}
-                  className="flex h-16 w-36 items-center justify-center rounded-xl border border-[#E5E5E5] bg-white px-4 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-px"
+                  className="flex h-14 w-full items-center justify-center rounded-xl border border-[#E5E5E5] bg-white px-4 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-px sm:h-16 sm:w-36"
                 >
                   {logoUrl ? (
                     <Image
@@ -177,7 +177,7 @@ export default async function Parceiros() {
       </section>
 
       {/* ── CTA ─────────────────────────────────────── */}
-      <section className="bg-[#BB0A24] py-20 text-white">
+      <section className="bg-[#BB0A24] py-14 sm:py-20 text-white">
         <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8">
           <ScrollReveal direction="left">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-white/60">Faça Parte</p>

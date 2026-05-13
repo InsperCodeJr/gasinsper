@@ -46,7 +46,7 @@ export default async function ComoFazerParte() {
     <div className="bg-white text-[#1A1A1A]">
 
       {/* ── HERO ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden border-b border-[#E5E5E5] bg-[#1A1A1A] py-28 text-white">
+      <section className="relative overflow-hidden border-b border-[#E5E5E5] bg-[#1A1A1A] py-20 sm:py-24 lg:py-28 text-white">
         <div
           className="pointer-events-none absolute left-1/2 top-0 h-64 w-96 -translate-x-1/2 opacity-20"
           style={{ background: "radial-gradient(ellipse at 50% 0%, #BB0A24 0%, transparent 70%)" }}
@@ -55,7 +55,7 @@ export default async function ComoFazerParte() {
           <p className="animate-fade-in text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
             Como Fazer Parte
           </p>
-          <h1 className="animate-fade-in-up delay-100 mt-4 max-w-3xl text-4xl font-black leading-tight sm:text-5xl">
+          <h1 className="animate-fade-in-up delay-100 mt-4 max-w-3xl text-3xl font-black leading-tight sm:text-4xl lg:text-5xl">
             Faça parte de algo maior
           </h1>
           <p className="animate-fade-in-up delay-200 mt-6 max-w-2xl text-base leading-7 text-white/70">
@@ -90,13 +90,13 @@ export default async function ComoFazerParte() {
         </div>
 
         {/* O que é ser membro */}
-        <div className="border-b border-[#E5E5E5] py-20">
+        <div className="border-b border-[#E5E5E5] py-14 sm:py-20">
           <div className="mx-auto grid w-full max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
             <ScrollReveal direction="left">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
                 O que é ser membro
               </p>
-              <h2 className="mt-4 text-3xl font-black leading-tight sm:text-4xl">
+              <h2 className="mt-4 text-2xl font-black leading-tight sm:text-3xl lg:text-4xl">
                 Mais do que um estudante voluntário
               </h2>
               <p className="mt-5 text-base leading-7 text-[#555555]">
@@ -131,11 +131,11 @@ export default async function ComoFazerParte() {
         </div>
 
         {/* Rotina de um membro */}
-        <div className="border-b border-[#E5E5E5] bg-[#F9F9F9] py-20">
+        <div className="border-b border-[#E5E5E5] bg-[#F9F9F9] py-14 sm:py-20">
           <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal direction="none">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">Sua Jornada</p>
-              <h2 className="mt-4 text-3xl font-black sm:text-4xl">Rotina de um Membro</h2>
+              <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">Rotina de um Membro</h2>
             </ScrollReveal>
 
             <div className="relative mt-10">
@@ -160,13 +160,13 @@ export default async function ComoFazerParte() {
         </div>
 
         {/* Processo Seletivo */}
-        <div className="border-b border-[#E5E5E5] py-20">
+        <div className="border-b border-[#E5E5E5] py-14 sm:py-20">
           <div className="mx-auto grid w-full max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
             <ScrollReveal direction="left">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
                 Como Entrar
               </p>
-              <h2 className="mt-4 text-3xl font-black sm:text-4xl">Processo Seletivo</h2>
+              <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">Processo Seletivo</h2>
               <p className="mt-5 text-base leading-7 text-[#555555]">
                 Abrimos seleção todo semestre. O processo é desenhado para identificar candidatos com potencial, engajamento e alinhamento aos valores do GAS — não apenas currículo.
               </p>
@@ -222,13 +222,13 @@ export default async function ComoFazerParte() {
         </div>
 
         {/* Intro */}
-        <div className="border-b border-[#E5E5E5] py-20">
+        <div className="border-b border-[#E5E5E5] py-14 sm:py-20">
           <div className="mx-auto grid w-full max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.5fr_1fr] lg:px-8">
             <ScrollReveal direction="left">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
                 Voluntariado
               </p>
-              <h2 className="mt-4 text-3xl font-black leading-tight sm:text-4xl">
+              <h2 className="mt-4 text-2xl font-black leading-tight sm:text-3xl lg:text-4xl">
                 O voluntariado que gera impacto real
               </h2>
               <p className="mt-5 text-base leading-7 text-[#555555]">
@@ -242,7 +242,7 @@ export default async function ComoFazerParte() {
             <div className="space-y-4">
               {VOLUNTEER_METRICS.map((item, i) => (
                 <ScrollReveal key={item.label} direction="right" delay={i * 80}>
-                  <div className="rounded-2xl border border-[#E5E5E5] bg-white p-5 shadow-sm transition-all duration-300 hover:border-[#BB0A24]/20 hover:shadow-md">
+                  <div className="rounded-2xl border border-[#E5E5E5] bg-white p-4 shadow-sm transition-all duration-300 hover:border-[#BB0A24]/20 hover:shadow-md sm:p-5">
                     <div className="flex items-baseline gap-2">
                       <span className="text-3xl font-black text-[#BB0A24]">{item.n}</span>
                       <span className="text-sm text-[#555555]">{item.label}</span>
@@ -256,13 +256,13 @@ export default async function ComoFazerParte() {
         </div>
 
         {/* Voluntariado por Projeto */}
-        <div className="py-20">
+        <div className="py-14 sm:py-20">
           <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal direction="none">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
                 Oportunidades
               </p>
-              <h2 className="mt-4 text-3xl font-black sm:text-4xl">Voluntariado por Projeto</h2>
+              <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">Voluntariado por Projeto</h2>
               {!hasSanityData && (
                 <p className="mt-2 text-xs italic text-[#555555]">
                   Conteúdo de exemplo — os projetos reais aparecerão automaticamente quando cadastrados no Sanity Studio.
@@ -273,7 +273,7 @@ export default async function ComoFazerParte() {
             <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {(projectsWithVolunteer.length > 0 ? projectsWithVolunteer : displayProjects).map((project, i) => (
                 <ScrollReveal key={project._id} direction="up" delay={i * 70}>
-                  <div className="group h-full rounded-2xl border border-[#E5E5E5] bg-white p-7 shadow-sm transition-all duration-300 hover:border-[#BB0A24]/20 hover:shadow-md hover:-translate-y-0.5">
+                  <div className="group h-full rounded-2xl border border-[#E5E5E5] bg-white p-5 shadow-sm transition-all duration-300 hover:border-[#BB0A24]/20 hover:shadow-md hover:-translate-y-0.5 sm:p-7">
                     <div className="h-0.5 w-6 bg-[#BB0A24] transition-all duration-300 group-hover:w-10" />
                     <h3 className="mt-5 text-lg font-black">{project.name}</h3>
                     <p className="mt-2 text-sm leading-6 text-[#555555]">

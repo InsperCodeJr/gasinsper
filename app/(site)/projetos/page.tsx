@@ -16,7 +16,7 @@ export default async function Projetos() {
     <div className="bg-white text-[#1A1A1A]">
 
       {/* ── HERO ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden border-b border-[#E5E5E5] bg-[#1A1A1A] py-28 text-white">
+      <section className="relative overflow-hidden border-b border-[#E5E5E5] bg-[#1A1A1A] py-20 sm:py-24 lg:py-28 text-white">
         {/* Subtle red glow */}
         <div
           className="pointer-events-none absolute left-1/2 top-0 h-64 w-96 -translate-x-1/2 opacity-20"
@@ -26,7 +26,7 @@ export default async function Projetos() {
           <p className="animate-fade-in text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
             Nossas Iniciativas
           </p>
-          <h1 className="animate-fade-in-up delay-100 mt-4 max-w-3xl text-4xl font-black leading-tight sm:text-5xl">
+          <h1 className="animate-fade-in-up delay-100 mt-4 max-w-3xl text-3xl font-black leading-tight sm:text-4xl lg:text-5xl">
             Projetos que geram impacto real
           </h1>
           <p className="animate-fade-in-up delay-200 mt-6 max-w-2xl text-base leading-7 text-white/70">
@@ -45,7 +45,7 @@ export default async function Projetos() {
       {/* ── MURAL DE FOTOS ───────────────────────────── */}
       {allGalleryImages.length > 0 && (
         <section className="overflow-hidden border-b border-[#E5E5E5]">
-          <div className="grid grid-cols-3 gap-1 sm:grid-cols-4 lg:grid-cols-6 bg-[#1A1A1A] p-1">
+          <div className="grid grid-cols-3 gap-1 overflow-hidden sm:grid-cols-4 lg:grid-cols-6 bg-[#1A1A1A] p-1">
             {allGalleryImages.slice(0, 12).map(({ img, project }, i) => (
               <div key={i} className="relative aspect-square overflow-hidden rounded-lg bg-[#F7F7F7]">
                 <Image
@@ -63,7 +63,7 @@ export default async function Projetos() {
       {/* ── FILTRO / NAVEGAÇÃO RÁPIDA ─────────────────── */}
       <section className="sticky top-16 z-40 border-b border-[#E5E5E5] bg-white/90 py-4 backdrop-blur-md">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 overflow-x-auto pb-1">
             {projects.map((p) => (
               <a
                 key={p._id}
@@ -100,12 +100,12 @@ function ProjectSection({ project, reversed }: { project: Project; reversed: boo
     <section id={project.slug.current} className="scroll-mt-28 border-b border-[#E5E5E5]">
 
       {/* ── Main grid: image + content ── */}
-      <div className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:py-14 sm:px-6 lg:py-16 lg:px-8">
         <div className={`grid gap-10 lg:grid-cols-2 lg:gap-16 ${reversed ? "lg:grid-flow-dense" : ""}`}>
 
           {/* Image card */}
           <ScrollReveal direction={reversed ? "right" : "left"} className={reversed ? "lg:col-start-2" : ""}>
-            <div className="group relative min-h-[340px] overflow-hidden rounded-2xl bg-[#1A1A1A] shadow-xl">
+            <div className="group relative min-h-[220px] overflow-hidden rounded-2xl bg-[#1A1A1A] shadow-xl sm:min-h-[340px]">
               {logoUrl ? (
                 <Image
                   src={logoUrl}
@@ -114,7 +114,7 @@ function ProjectSection({ project, reversed }: { project: Project; reversed: boo
                   className="object-cover opacity-85 transition-all duration-700 group-hover:scale-105 group-hover:opacity-75"
                 />
               ) : (
-                <div className="flex h-full min-h-[340px] items-center justify-center bg-gradient-to-br from-[#1A1A1A] via-[#2A0C12] to-[#BB0A24]/25">
+                <div className="flex h-full min-h-[220px] items-center justify-center bg-gradient-to-br from-[#1A1A1A] via-[#2A0C12] to-[#BB0A24]/25 sm:min-h-[340px]">
                   <span className="text-[9rem] font-black text-white/5 select-none">
                     {project.name.charAt(0)}
                   </span>
@@ -150,7 +150,7 @@ function ProjectSection({ project, reversed }: { project: Project; reversed: boo
                 </span>
               )}
             </div>
-            <h2 className="mt-4 text-3xl font-black leading-tight sm:text-4xl">{project.name}</h2>
+            <h2 className="mt-4 text-2xl font-black leading-tight sm:text-3xl lg:text-4xl">{project.name}</h2>
             <p className="mt-5 text-base leading-7 text-[#555555]">{project.description}</p>
 
             {project.objective && (
@@ -165,7 +165,7 @@ function ProjectSection({ project, reversed }: { project: Project; reversed: boo
 
       {/* ── Stats ── */}
       {project.stats && project.stats.length > 0 && (
-        <div className="border-t border-[#E5E5E5] bg-gradient-to-br from-[#F9F9F9] to-white py-12">
+        <div className="border-t border-[#E5E5E5] bg-gradient-to-br from-[#F9F9F9] to-white py-10 sm:py-12">
           <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal direction="none">
               <p className="mb-8 text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">

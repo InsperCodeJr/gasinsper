@@ -20,14 +20,46 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  /* iOS momentum scroll */
+  -webkit-overflow-scrolling: touch;
 }
+
+/* ── Typography polish ──────────────────────────────────── */
+
+h1, h2, h3, h4 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* ── Selection ──────────────────────────────────────────── */
+
+::selection {
+  background-color: #BB0A24;
+  color: #fff;
+}
+
+/* ── Focus ring ─────────────────────────────────────────── */
 
 *:focus-visible {
   outline: 2px solid #BB0A24;
   outline-offset: 2px;
+  border-radius: 4px;
 }
 
-/* ── Keyframe animations (above-the-fold / hero) ────────── */
+/* ── Scrollbar ──────────────────────────────────────────── */
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: #E5E5E5;
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover { background: #BB0A24; }
+
+/* ── Keyframes (above-fold / hero) ─────────────────────── */
 
 @keyframes fade-in-up {
   from { opacity: 0; transform: translateY(20px); }
@@ -67,7 +99,7 @@ body {
 .delay-500 { animation-delay: 500ms; }
 .delay-600 { animation-delay: 600ms; }
 
-/* ── Scroll reveal (below-the-fold) ─────────────────────── */
+/* ── Scroll reveal (below-fold) ─────────────────────────── */
 
 .sr-hidden {
   opacity: 0;
@@ -75,10 +107,9 @@ body {
     opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
     transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
 }
-
-.sr-up    { transform: translateY(32px); }
-.sr-left  { transform: translateX(-32px); }
-.sr-right { transform: translateX(32px); }
+.sr-up    { transform: translateY(28px); }
+.sr-left  { transform: translateX(-28px); }
+.sr-right { transform: translateX(28px); }
 .sr-none  { transform: none; }
 
 .sr-visible {
@@ -89,16 +120,11 @@ body {
 /* ── Reduced motion ──────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-in-up,
-  .animate-fade-in,
-  .animate-slide-in-left {
-    animation: none;
-    opacity: 1;
-    transform: none;
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
-
-  .sr-hidden {
-    opacity: 1;
-    transform: none;
-  }
+  .sr-hidden { opacity: 1; transform: none; }
 }

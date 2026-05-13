@@ -30,7 +30,7 @@ export default async function ONGs() {
     <div className="bg-white text-[#1A1A1A]">
 
       {/* ── HERO ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden border-b border-[#E5E5E5] bg-[#1A1A1A] py-28 text-white">
+      <section className="relative overflow-hidden border-b border-[#E5E5E5] bg-[#1A1A1A] py-20 sm:py-24 lg:py-28 text-white">
         <div
           className="pointer-events-none absolute left-1/2 top-0 h-64 w-96 -translate-x-1/2 opacity-20"
           style={{ background: "radial-gradient(ellipse at 50% 0%, #BB0A24 0%, transparent 70%)" }}
@@ -39,7 +39,7 @@ export default async function ONGs() {
           <p className="animate-fade-in text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
             ONGs
           </p>
-          <h1 className="animate-fade-in-up delay-100 mt-4 max-w-3xl text-4xl font-black leading-tight sm:text-5xl">
+          <h1 className="animate-fade-in-up delay-100 mt-4 max-w-3xl text-3xl font-black leading-tight sm:text-4xl lg:text-5xl">
             As organizações que dão sentido ao nosso trabalho
           </h1>
           <p className="animate-fade-in-up delay-200 mt-6 max-w-2xl text-base leading-7 text-white/70">
@@ -49,10 +49,10 @@ export default async function ONGs() {
       </section>
 
       {/* ── NOSSO PAPEL + O QUE AS ONGS GANHAM ─────── */}
-      <section className="border-b border-[#E5E5E5] py-20">
+      <section className="border-b border-[#E5E5E5] py-14 sm:py-20">
         <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
           <ScrollReveal direction="left">
-            <div className="h-full rounded-2xl border border-[#E5E5E5] bg-white p-8 shadow-sm">
+            <div className="h-full rounded-2xl border border-[#E5E5E5] bg-white p-5 shadow-sm sm:p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
                 Nosso Papel
               </p>
@@ -66,7 +66,7 @@ export default async function ONGs() {
           </ScrollReveal>
 
           <ScrollReveal direction="right" delay={100}>
-            <div className="h-full rounded-2xl border border-[#E5E5E5] bg-white p-8 shadow-sm">
+            <div className="h-full rounded-2xl border border-[#E5E5E5] bg-white p-5 shadow-sm sm:p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
                 O Impacto da Colaboração
               </p>
@@ -88,7 +88,7 @@ export default async function ONGs() {
 
       {/* ── DEPOIMENTOS ──────────────────────────────── */}
       {allTestimonials.length > 0 && (
-        <section className="border-b border-[#E5E5E5] bg-[#1A1A1A] py-20">
+        <section className="border-b border-[#E5E5E5] bg-[#1A1A1A] py-14 sm:py-20">
           <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal direction="none">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
@@ -137,7 +137,7 @@ export default async function ONGs() {
       )}
 
       {/* ── ONGs PARCEIRAS ───────────────────────────── */}
-      <section className="border-b border-[#E5E5E5] py-20">
+      <section className="border-b border-[#E5E5E5] py-14 sm:py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="none">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
@@ -186,7 +186,7 @@ export default async function ONGs() {
       </section>
 
       {/* ── CTA ─────────────────────────────────────── */}
-      <section className="bg-[#BB0A24] py-20 text-white">
+      <section className="bg-[#BB0A24] py-14 sm:py-20 text-white">
         <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8">
           <ScrollReveal direction="left">
             <h2 className="text-3xl font-black sm:text-4xl">Sua ONG pode ser a próxima</h2>

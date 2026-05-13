@@ -23,7 +23,7 @@ export default async function Eventos() {
     <div className="bg-white text-[#1A1A1A]">
 
       {/* ── HERO ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden border-b border-[#E5E5E5] bg-[#1A1A1A] py-28 text-white">
+      <section className="relative overflow-hidden border-b border-[#E5E5E5] bg-[#1A1A1A] py-20 sm:py-24 lg:py-28 text-white">
         <div
           className="pointer-events-none absolute left-1/2 top-0 h-64 w-96 -translate-x-1/2 opacity-20"
           style={{ background: "radial-gradient(ellipse at 50% 0%, #BB0A24 0%, transparent 70%)" }}
@@ -32,7 +32,7 @@ export default async function Eventos() {
           <p className="animate-fade-in text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
             Nossos Eventos
           </p>
-          <h1 className="animate-fade-in-up delay-100 mt-4 max-w-3xl text-4xl font-black leading-tight sm:text-5xl">
+          <h1 className="animate-fade-in-up delay-100 mt-4 max-w-3xl text-3xl font-black leading-tight sm:text-4xl lg:text-5xl">
             Onde o impacto se torna experiência
           </h1>
           <p className="animate-fade-in-up delay-200 mt-6 max-w-2xl text-base leading-7 text-white/70">
@@ -42,7 +42,7 @@ export default async function Eventos() {
       </section>
 
       {/* ── LISTA DE EVENTOS ─────────────────────────── */}
-      <section className="border-b border-[#E5E5E5] py-20">
+      <section className="border-b border-[#E5E5E5] py-14 sm:py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           {!hasSanityData && (
             <p className="mb-8 text-xs italic text-[#555555]">Conteúdo de exemplo — cadastre os eventos reais no Sanity Studio.</p>
@@ -83,7 +83,7 @@ export default async function Eventos() {
                     </div>
 
                     {/* Content */}
-                    <div className={`flex flex-col justify-center px-8 py-10 ${index % 2 !== 0 ? "lg:order-1" : ""}`}>
+                    <div className={`flex flex-col justify-center px-5 py-7 sm:px-8 sm:py-10 ${index % 2 !== 0 ? "lg:order-1" : ""}`}>
                       <div className="h-0.5 w-8 bg-[#BB0A24]" />
                       <h2 className="mt-5 text-2xl font-black leading-tight sm:text-3xl">
                         {event.title}
@@ -101,7 +101,7 @@ export default async function Eventos() {
       </section>
 
       {/* ── CTA PARCEIROS ────────────────────────────── */}
-      <section className="bg-[#1A1A1A] py-20">
+      <section className="bg-[#1A1A1A] py-14 sm:py-20">
         <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8">
           <ScrollReveal direction="left">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">

@@ -29,27 +29,25 @@ export default function VideoHero() {
   }
 
   return (
-    <div className="relative flex min-h-[70vh] items-end overflow-hidden bg-[#1A1A1A]">
-      {/* Background gradient simulating video */}
+    <div className="relative flex min-h-[55vh] items-end overflow-hidden bg-[#1A1A1A] sm:min-h-[65vh] lg:min-h-[70vh]">
       <div className="absolute inset-0 bg-gradient-to-br from-[#1A1A1A] via-[#2D0A12] to-[#BB0A24]/30" />
       <div className="absolute inset-0 bg-[url('/insper.jpg')] bg-cover bg-center opacity-20" />
 
-      {/* Content overlay */}
-      <div className="relative mx-auto w-full max-w-7xl px-4 pb-16 pt-24 sm:px-6 lg:px-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
+      <div className="relative mx-auto w-full max-w-7xl px-4 pb-12 pt-16 sm:pb-14 sm:pt-20 sm:px-6 lg:pb-16 lg:pt-24 lg:px-8">
+        <p className="animate-fade-in text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
           Sobre Nós
         </p>
-        <h1 className="mt-4 max-w-3xl text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
+        <h1 className="animate-fade-in-up delay-100 mt-4 max-w-3xl text-3xl font-black leading-tight text-white sm:text-4xl lg:text-6xl">
           Conheça o GAS
         </h1>
-        <p className="mt-5 max-w-xl text-base text-white/70">
+        <p className="animate-fade-in-up delay-200 mt-4 max-w-xl text-sm leading-6 text-white/70 sm:text-base sm:leading-7">
           Uma organização estudantil que transforma potencial em impacto social real.
         </p>
         <button
           onClick={() => setWatching(true)}
-          className="mt-8 inline-flex items-center gap-3 border border-white/30 px-6 py-3 text-sm font-semibold text-white transition hover:border-white hover:bg-white/10"
+          className="animate-fade-in-up delay-300 mt-7 inline-flex min-h-[48px] items-center gap-3 rounded-xl border border-white/30 px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:border-white hover:bg-white/10 active:bg-white/5 sm:mt-8 sm:px-6"
         >
-          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/50">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/50 transition-all duration-200 group-hover:border-white">
             <svg className="h-3 w-3 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z" />
             </svg>
