@@ -63,12 +63,13 @@ export default async function Projetos() {
       {/* ── FILTRO / NAVEGAÇÃO RÁPIDA ─────────────────── */}
       <section className="sticky top-16 z-40 border-b border-[#E5E5E5] bg-white/90 py-4 backdrop-blur-md">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap gap-2 overflow-x-auto pb-1">
+          {/* py-2 -my-2 px-2 -mx-2: espaço no padding para o scale não ser clipado pelo overflow-x:auto */}
+          <div className="flex flex-wrap gap-2 overflow-x-auto py-2 -my-2 px-2 -mx-2">
             {projects.map((p) => (
               <a
                 key={p._id}
                 href={`#${p.slug.current}`}
-                className="rounded-full border border-[#E5E5E5] bg-white px-4 py-1.5 text-xs font-semibold text-[#555] transition-all duration-200 hover:border-[#BB0A24] hover:text-[#BB0A24] hover:shadow-sm hover:-translate-y-px"
+                className="rounded-full border border-[#E5E5E5] bg-white px-4 py-1.5 text-xs font-semibold text-[#555] transition-all duration-200 hover:border-[#BB0A24] hover:text-[#BB0A24] hover:scale-105 hover:shadow-sm"
               >
                 {p.name}
               </a>

@@ -28,7 +28,7 @@ export default async function Home() {
       <section className="relative overflow-hidden border-b border-[#E5E5E5]">
         <ParallaxBackground speed={0.28}>
           <Image src="/insper.jpg" alt="" fill priority className="object-cover" />
-          <div className="absolute inset-0 bg-[#1A1A1A]/72" />
+          <div className="absolute inset-0 bg-[#1A1A1A]/30" />
         </ParallaxBackground>
 
         <div className="relative mx-auto w-full max-w-7xl px-4 pb-16 pt-20 sm:pb-20 sm:pt-24 sm:px-6 lg:pb-28 lg:pt-32 lg:px-8">
@@ -182,14 +182,16 @@ export default async function Home() {
                               <span className="absolute inset-0 flex items-center justify-center text-9xl font-black text-white/5 select-none">{project.name.charAt(0)}</span>
                             </div>
                           )}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/5 transition-all duration-500 group-hover:from-black/80 group-hover:via-black/30" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent transition-all duration-500 group-hover:from-black/45 group-hover:via-black/15" />
                           <div className="absolute inset-x-0 bottom-0 p-4">
                             <div className="rounded-xl border border-white/10 bg-black/40 p-4 shadow-xl backdrop-blur-md transition-transform duration-300 group-hover:-translate-y-1">
                               <h3 className="font-bold text-white leading-tight">{project.name}</h3>
-                              <div className="grid transition-all duration-400 overflow-hidden max-h-0 group-hover:max-h-24 mt-0 group-hover:mt-2">
-                                <p className="text-sm text-white/70 leading-6 line-clamp-3">{project.description}</p>
+                              <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-hover:grid-rows-[1fr]">
+                                <div className="overflow-hidden">
+                                  <p className="mt-2 text-sm text-white/70 leading-6 line-clamp-3">{project.description}</p>
+                                </div>
                               </div>
-                              <div className="flex items-center gap-1 text-xs font-semibold text-[#BB0A24] opacity-0 transition-opacity duration-300 group-hover:opacity-100 mt-0 group-hover:mt-3">
+                              <div className="mt-0 flex items-center gap-1 text-xs font-semibold text-[#BB0A24] opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:mt-3">
                                 Ver projeto <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">→</span>
                               </div>
                             </div>
@@ -204,14 +206,16 @@ export default async function Home() {
                     <Link href="/projetos" className="group relative block overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-500">
                       <div className="relative aspect-[4/3] bg-gradient-to-br from-[#1A1A1A] via-[#2A0C12] to-[#BB0A24]/20">
                         <span className="absolute inset-0 flex items-center justify-center text-9xl font-black text-white/5 select-none">{project.name.charAt(0)}</span>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/5" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
                         <div className="absolute inset-x-0 bottom-0 p-4">
                           <div className="rounded-xl border border-white/10 bg-black/40 p-4 shadow-xl backdrop-blur-md transition-transform duration-300 group-hover:-translate-y-1">
                             <h3 className="font-bold text-white leading-tight">{project.name}</h3>
-                            <div className="grid transition-all duration-400 overflow-hidden max-h-0 group-hover:max-h-24 mt-0 group-hover:mt-2">
-                              <p className="text-sm text-white/70 leading-6">{project.description}</p>
+                            <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-hover:grid-rows-[1fr]">
+                              <div className="overflow-hidden">
+                                <p className="mt-2 text-sm text-white/70 leading-6">{project.description}</p>
+                              </div>
                             </div>
-                            <div className="flex items-center gap-1 text-xs font-semibold text-[#BB0A24] opacity-0 transition-opacity duration-300 group-hover:opacity-100 mt-0 group-hover:mt-3">
+                            <div className="mt-0 flex items-center gap-1 text-xs font-semibold text-[#BB0A24] opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:mt-3">
                               Ver projeto <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">→</span>
                             </div>
                           </div>
