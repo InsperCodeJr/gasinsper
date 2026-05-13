@@ -1,136 +1,108 @@
 import { client } from './client'
-import { Project, Event, Partner, ONG, TeamMember, Area, HomeMetrics, HomeMetricItem } from '@/types/sanity'
+import { Project, Event, Partner, ONG, TeamMember, Area, HomeMetricItem } from '@/types/sanity'
+
+const IMAGE_FIELDS = `{
+  asset->{_id, _ref, url, metadata{dimensions}},
+  hotspot,
+  crop
+}`
 
 // PROJETOS
 
 export async function getAllProjects(): Promise<Project[]> {
-  const query = `*[_type == "project"] | order(_createdAt desc)`
+  const query = `*[_type == "project"] | order(_createdAt asc) {
+    _id, _type, name, slug, description, objective, targetAudience,
+    instagramHandle, stats,
+    logo ${IMAGE_FIELDS},
+    galleryImages[] ${IMAGE_FIELDS},
+    partners[]->{_id, name, logo ${IMAGE_FIELDS}, description, isHistorical},
+    testimonials[]{author, role, text, photo ${IMAGE_FIELDS}},
+    volunteerInfo
+  }`
   return client.fetch(query)
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
-  const query = `*[_type == "project" && slug.current == $slug][0]`
-  return client.fetch(query, { slug })
-}
-
-export async function getProjectStats(): Promise<{ total: number; recent: number }> {
-  const query = `{
-    "total": count(*[_type == "project"]),
-    "recent": count(*[_type == "project" && dateTime(_createdAt) > dateTime(now()) - 86400*30])
+  const query = `*[_type == "project" && slug.current == $slug][0] {
+    _id, _type, name, slug, description, objective, targetAudience,
+    instagramHandle, stats,
+    logo ${IMAGE_FIELDS},
+    galleryImages[] ${IMAGE_FIELDS},
+    partners[]->{_id, name, logo ${IMAGE_FIELDS}, description, isHistorical},
+    testimonials[]{author, role, text, photo ${IMAGE_FIELDS}},
+    volunteerInfo
   }`
-  return client.fetch(query)
+  return client.fetch(query, { slug })
 }
 
 // EVENTOS
 
 export async function getAllEvents(): Promise<Event[]> {
-  const query = `*[_type == "event"] | order(date desc)`
-  return client.fetch(query)
-}
-
-export async function getEventBySlug(slug: string): Promise<Event | null> {
-  const query = `*[_type == "event" && slug.current == $slug][0]`
-  return client.fetch(query, { slug })
-}
-
-export async function getUpcomingEvents(): Promise<Event[]> {
-  const query = `*[_type == "event" && date > now()] | order(date asc) | [0...5]`
+  const query = `*[_type == "event"] | order(date desc) {
+    _id, _type, title, slug, description, date,
+    image ${IMAGE_FIELDS}
+  }`
   return client.fetch(query)
 }
 
 // PARCEIROS
 
 export async function getAllPartners(): Promise<Partner[]> {
-  const query = `*[_type == "partner"] | order(name asc)`
+  const query = `*[_type == "partner"] | order(name asc) {
+    _id, _type, name, description, website, isHistorical,
+    logo ${IMAGE_FIELDS}
+  }`
   return client.fetch(query)
 }
 
 export async function getCurrentPartners(): Promise<Partner[]> {
-  const query = `*[_type == "partner" && isHistorical != true] | order(name asc)`
+  const query = `*[_type == "partner" && isHistorical != true] | order(name asc) {
+    _id, _type, name, description, website, isHistorical,
+    logo ${IMAGE_FIELDS}
+  }`
   return client.fetch(query)
 }
 
 export async function getHistoricalPartners(): Promise<Partner[]> {
-  const query = `*[_type == "partner" && isHistorical == true] | order(name asc)`
+  const query = `*[_type == "partner" && isHistorical == true] | order(name asc) {
+    _id, _type, name, description, website, isHistorical,
+    logo ${IMAGE_FIELDS}
+  }`
   return client.fetch(query)
 }
 
 // ONGs
 
 export async function getAllONGs(): Promise<ONG[]> {
-  const query = `*[_type == "ong"] | order(name asc)`
-  return client.fetch(query)
-}
-
-export async function getONGCount(): Promise<number> {
-  const query = `count(*[_type == "ong"])`
+  const query = `*[_type == "ong"] | order(name asc) {
+    _id, _type, name, description, website,
+    logo ${IMAGE_FIELDS},
+    testimonials[]{author, text, photo ${IMAGE_FIELDS}}
+  }`
   return client.fetch(query)
 }
 
 // MEMBROS DA GESTÃO
 
 export async function getAllTeamMembers(): Promise<TeamMember[]> {
-  const query = `*[_type == "teamMember"] | order(name asc){
-    ...,
-    area->{...}
+  const query = `*[_type == "teamMember"] | order(order asc, name asc) {
+    _id, _type, name, position, email, instagram, linkedin, isMatrix, order,
+    photo ${IMAGE_FIELDS},
+    area->{_id, name, description}
   }`
   return client.fetch(query)
-}
-
-export async function getTeamMembersByArea(areaId: string): Promise<TeamMember[]> {
-  const query = `*[_type == "teamMember" && area._ref == $areaId] | order(name asc)`
-  return client.fetch(query, { areaId })
 }
 
 // ÁREAS
 
 export async function getAllAreas(): Promise<Area[]> {
-  const query = `*[_type == "area"] | order(_createdAt asc)`
-  return client.fetch(query)
-}
-
-export async function getAreaById(id: string): Promise<Area | null> {
-  const query = `*[_type == "area" && _id == $id][0]`
-  return client.fetch(query, { id })
-}
-
-// ESTATÍSTICAS GERAIS
-
-export async function getGeneralStats(): Promise<{
-  totalProjects: number
-  totalPartners: number
-  totalONGs: number
-  totalMembers: number
-}> {
-  const query = `{
-    "totalProjects": count(*[_type == "project"]),
-    "totalPartners": count(*[_type == "partner"]),
-    "totalONGs": count(*[_type == "ong"]),
-    "totalMembers": count(*[_type == "teamMember"])
+  const query = `*[_type == "area"] | order(order asc, _createdAt asc) {
+    _id, _type, name, description, order
   }`
   return client.fetch(query)
 }
 
-// BUSCA GERAL
-
-export async function searchContent(searchTerm: string): Promise<
-  Array<Project | Event | Partner | ONG>
-> {
-  const query = `[
-    *[_type == "project" && (name match $search || description match $search)],
-    *[_type == "event" && (title match $search || description match $search)],
-    *[_type == "partner" && (name match $search || description match $search)],
-    *[_type == "ong" && (name match $search || description match $search)]
-  ] | order(_createdAt desc)`
-  return client.fetch(query, { search: `*${searchTerm}*` })
-}
-
 // HOME
-
-export async function getHomeMetrics(): Promise<HomeMetrics | null> {
-  const query = `*[_type == "homeMetrics"][0]`
-  return client.fetch(query)
-}
 
 export async function getHomeImpactNumbers(): Promise<HomeMetricItem[]> {
   const query = `{
@@ -150,7 +122,7 @@ export async function getHomeImpactNumbers(): Promise<HomeMetricItem[]> {
   ]
 
   return [
-    { label: 'Projetos realizados', value: `${data.projectCount}` },
+    { label: 'Projetos realizados', value: `${data.projectCount || '10+'}` },
     ...manualStats,
   ]
 }

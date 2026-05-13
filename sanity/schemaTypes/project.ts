@@ -15,18 +15,20 @@ export const project = defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: {
-        source: 'name',
-      },
+      options: { source: 'name' },
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'logo',
-      title: 'Logo/Imagem',
+      title: 'Logo/Imagem Principal',
       type: 'image',
-      options: {
-        hotspot: true,
-      },
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: 'galleryImages',
+      title: 'Galeria de Fotos (Mural)',
+      type: 'array',
+      of: [{ type: 'image', options: { hotspot: true } }],
     }),
     defineField({
       name: 'description',
@@ -60,12 +62,13 @@ export const project = defineType({
     }),
     defineField({
       name: 'instagramHandle',
-      title: 'Instagram (@)',
+      title: 'Instagram do Projeto (@)',
       type: 'string',
+      description: 'Apenas o handle, sem o @. Ex: gas.mentoria',
     }),
     defineField({
       name: 'partners',
-      title: 'Parceiros',
+      title: 'Parceiros do Projeto',
       type: 'array',
       of: [{ type: 'reference', to: { type: 'partner' } }],
     }),
@@ -78,8 +81,9 @@ export const project = defineType({
           type: 'object',
           fields: [
             { name: 'author', type: 'string', title: 'Autor' },
-            { name: 'text', type: 'text', title: 'Texto' },
-            { name: 'photo', type: 'image', title: 'Foto' },
+            { name: 'role', type: 'string', title: 'Papel/Relação com o projeto' },
+            { name: 'text', type: 'text', title: 'Texto do Depoimento' },
+            { name: 'photo', type: 'image', title: 'Foto', options: { hotspot: true } },
           ],
         },
       ],
@@ -89,9 +93,10 @@ export const project = defineType({
       title: 'Informações de Voluntariado',
       type: 'object',
       fields: [
-        { name: 'description', type: 'text', title: 'Descrição' },
+        { name: 'description', type: 'text', title: 'Sobre o Voluntariado neste Projeto' },
         { name: 'opportunities', type: 'text', title: 'Tipo de Atuação' },
         { name: 'process', type: 'text', title: 'Funcionamento do Processo' },
+        { name: 'demand', type: 'string', title: 'Demanda Atual (ex: 5 vagas abertas)' },
       ],
     }),
   ],

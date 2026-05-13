@@ -23,6 +23,7 @@ export interface Area {
   _type: 'area'
   name: string
   description: string
+  order?: number
 }
 
 export interface Project {
@@ -31,6 +32,7 @@ export interface Project {
   name: string
   slug: { current: string }
   logo?: SanityImage
+  galleryImages?: SanityImage[]
   description: string
   objective?: string
   targetAudience?: string
@@ -39,9 +41,10 @@ export interface Project {
     value: string
   }>
   instagramHandle?: string
-  partners?: Array<{ _ref: string }>
+  partners?: Partner[]
   testimonials?: Array<{
     author: string
+    role?: string
     text: string
     photo?: SanityImage
   }>
@@ -49,6 +52,7 @@ export interface Project {
     description?: string
     opportunities?: string
     process?: string
+    demand?: string
   }
 }
 
@@ -57,7 +61,7 @@ export interface Event {
   _type: 'event'
   title: string
   slug: { current: string }
-  image: SanityImage
+  image?: SanityImage
   description: string
   date?: string
 }
@@ -66,7 +70,7 @@ export interface Partner {
   _id: string
   _type: 'partner'
   name: string
-  logo: SanityImage
+  logo?: SanityImage
   description?: string
   website?: string
   isHistorical: boolean
@@ -93,9 +97,11 @@ export interface TeamMember {
   position: string
   photo?: SanityImage
   email?: string
-  phone?: string
   instagram?: string
-  area?: { _ref: string }
+  linkedin?: string
+  isMatrix?: boolean
+  order?: number
+  area?: Area
 }
 
 export interface HomeMetricItem {

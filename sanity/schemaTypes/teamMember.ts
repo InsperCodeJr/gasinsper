@@ -21,9 +21,7 @@ export const teamMember = defineType({
       name: 'photo',
       title: 'Foto',
       type: 'image',
-      options: {
-        hotspot: true,
-      },
+      options: { hotspot: true },
     }),
     defineField({
       name: 'email',
@@ -31,20 +29,32 @@ export const teamMember = defineType({
       type: 'string',
     }),
     defineField({
-      name: 'phone',
-      title: 'Telefone',
+      name: 'instagram',
+      title: 'Instagram (handle, sem @)',
       type: 'string',
     }),
     defineField({
-      name: 'instagram',
-      title: 'Instagram',
-      type: 'string',
+      name: 'linkedin',
+      title: 'LinkedIn (URL)',
+      type: 'url',
     }),
     defineField({
       name: 'area',
       title: 'Área',
       type: 'reference',
       to: { type: 'area' },
+    }),
+    defineField({
+      name: 'isMatrix',
+      title: 'É da Matriz?',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Marque se este membro faz parte da estrutura matricial (diretoria/presidência)',
+    }),
+    defineField({
+      name: 'order',
+      title: 'Ordem de Exibição',
+      type: 'number',
     }),
   ],
 })

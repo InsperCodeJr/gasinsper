@@ -13,9 +13,15 @@ export const area = defineType({
     }),
     defineField({
       name: 'description',
-      title: 'Descrição',
+      title: 'Descrição da Atuação',
       type: 'text',
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'order',
+      title: 'Ordem de Exibição',
+      type: 'number',
+      description: 'Número para ordenar as áreas (1, 2, 3, 4)',
     }),
   ],
 })
