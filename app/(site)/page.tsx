@@ -6,6 +6,7 @@ import { urlFor } from "@/sanity/lib/image";
 import ScrollReveal from "@/components/ScrollReveal";
 import CountUp from "@/components/CountUp";
 import ParallaxBackground from "@/components/ParallaxBackground";
+import ProjectCarousel from "@/components/ProjectCarousel";
 
 const FALLBACK_PROJECTS = [
   { id: "mentoria", name: "Mentoria Social", description: "Capacitação e acompanhamento de jovens para desenvolvimento acadêmico e profissional." },
@@ -20,6 +21,26 @@ export default async function Home() {
   ]);
   const featuredProjects = projects.slice(0, 6);
   const hasProjects = featuredProjects.length > 0;
+
+  const carouselProjects = hasProjects
+    ? featuredProjects.map((p) => ({
+        _id: p._id,
+        name: p.name,
+        description: p.description,
+        slug: p.slug,
+        cardColor: p.cardColor ?? null,
+        imageUrl: p.logo
+          ? urlFor(p.logo).width(700).height(525).fit("crop").url()
+          : null,
+      }))
+    : FALLBACK_PROJECTS.map((p) => ({
+        _id: p.id,
+        name: p.name,
+        description: p.description,
+        slug: { current: p.id },
+        cardColor: null,
+        imageUrl: null,
+      }));
 
   return (
     <div className="bg-white text-[#1A1A1A]">
@@ -54,6 +75,12 @@ export default async function Home() {
               className="inline-flex items-center border border-[#BB0A24] bg-[#BB0A24] px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#8F071B] hover:border-[#8F071B] hover:-translate-y-px active:translate-y-0 sm:px-7 sm:py-3.5"
             >
               Ver Projetos
+            </Link>
+            <Link
+              href="/parceiros"
+              className="inline-flex items-center border border-white/30 px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:border-white hover:bg-white/10 hover:-translate-y-px active:translate-y-0 sm:px-7 sm:py-3.5"
+            >
+              Parceiros
             </Link>
           </div>
         </div>
@@ -109,7 +136,7 @@ export default async function Home() {
       </section>
 
       {/* ═══ NOSSOS NÚMEROS ═════════════════════════════ */}
-      <section className="border-b border-[#E5E5E5] bg-[#1A1A1A] py-14 text-white sm:py-20">
+      <section className="border-b border-[#E5E5E5] bg-gradient-to-br from-[#1A060C] via-[#5C1926] to-[#1A060C] py-14 text-white sm:py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="none" className="text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
@@ -162,68 +189,8 @@ export default async function Home() {
             </Link>
           </ScrollReveal>
 
-          <div className="mt-6 grid gap-4 sm:mt-8 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
-            {hasProjects
-              ? featuredProjects.map((project, i) => {
-                  const projectImage = project.logo
-                    ? urlFor(project.logo).width(700).height(525).fit("crop").url()
-                    : null;
-                  return (
-                    <ScrollReveal key={project._id} direction="up" delay={i * 75}>
-                      <Link
-                        href={`/projetos#${project.slug.current}`}
-                        className="group relative block overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-500"
-                      >
-                        <div className="relative aspect-[4/3] bg-[#1A1A1A]">
-                          {projectImage ? (
-                            <Image src={projectImage} alt={project.name} fill className="object-cover opacity-75 transition-all duration-700 group-hover:scale-110 group-hover:opacity-55" />
-                          ) : (
-                            <div className="h-full bg-gradient-to-br from-[#1A1A1A] via-[#2A0C12] to-[#BB0A24]/30">
-                              <span className="absolute inset-0 flex items-center justify-center text-9xl font-black text-white/5 select-none">{project.name.charAt(0)}</span>
-                            </div>
-                          )}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent transition-all duration-500 group-hover:from-black/45 group-hover:via-black/15" />
-                          <div className="absolute inset-x-0 bottom-0 p-4">
-                            <div className="rounded-xl border border-white/10 bg-black/40 p-4 shadow-xl backdrop-blur-md transition-transform duration-300 group-hover:-translate-y-1">
-                              <h3 className="font-bold text-white leading-tight">{project.name}</h3>
-                              <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-hover:grid-rows-[1fr]">
-                                <div className="overflow-hidden">
-                                  <p className="mt-2 text-sm text-white/70 leading-6 line-clamp-3">{project.description}</p>
-                                </div>
-                              </div>
-                              <div className="mt-0 flex items-center gap-1 text-xs font-semibold text-[#BB0A24] opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:mt-3">
-                                Ver projeto <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">→</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-                    </ScrollReveal>
-                  );
-                })
-              : FALLBACK_PROJECTS.map((project, i) => (
-                  <ScrollReveal key={project.id} direction="up" delay={i * 75}>
-                    <Link href="/projetos" className="group relative block overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-500">
-                      <div className="relative aspect-[4/3] bg-gradient-to-br from-[#1A1A1A] via-[#2A0C12] to-[#BB0A24]/20">
-                        <span className="absolute inset-0 flex items-center justify-center text-9xl font-black text-white/5 select-none">{project.name.charAt(0)}</span>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
-                        <div className="absolute inset-x-0 bottom-0 p-4">
-                          <div className="rounded-xl border border-white/10 bg-black/40 p-4 shadow-xl backdrop-blur-md transition-transform duration-300 group-hover:-translate-y-1">
-                            <h3 className="font-bold text-white leading-tight">{project.name}</h3>
-                            <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-hover:grid-rows-[1fr]">
-                              <div className="overflow-hidden">
-                                <p className="mt-2 text-sm text-white/70 leading-6">{project.description}</p>
-                              </div>
-                            </div>
-                            <div className="mt-0 flex items-center gap-1 text-xs font-semibold text-[#BB0A24] opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:mt-3">
-                              Ver projeto <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">→</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  </ScrollReveal>
-                ))}
+          <div className="mt-6 sm:mt-8">
+            <ProjectCarousel projects={carouselProjects} />
           </div>
         </div>
       </section>
@@ -254,6 +221,12 @@ export default async function Home() {
               className="inline-flex items-center justify-center rounded-xl border border-white/40 px-6 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:border-white hover:bg-white/10 hover:-translate-y-px active:translate-y-0 sm:px-7"
             >
               Quero ser Voluntário
+            </Link>
+            <Link
+              href="/parceiros"
+              className="inline-flex items-center justify-center rounded-xl border border-white/40 px-6 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:border-white hover:bg-white/10 hover:-translate-y-px active:translate-y-0 sm:px-7"
+            >
+              Virar Parceiro
             </Link>
           </ScrollReveal>
         </div>

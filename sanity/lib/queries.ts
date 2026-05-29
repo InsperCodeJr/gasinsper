@@ -12,7 +12,7 @@ const IMAGE_FIELDS = `{
 export async function getAllProjects(): Promise<Project[]> {
   const query = `*[_type == "project"] | order(_createdAt asc) {
     _id, _type, name, slug, description, objective, targetAudience,
-    instagramHandle, stats,
+    instagramHandle, stats, cardColor,
     logo ${IMAGE_FIELDS},
     galleryImages[] ${IMAGE_FIELDS},
     partners[]->{_id, name, logo ${IMAGE_FIELDS}, description, isHistorical},
@@ -39,9 +39,24 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
 
 export async function getAllEvents(): Promise<Event[]> {
   const query = `*[_type == "event"] | order(date desc) {
-    _id, _type, title, slug, description, date,
-    image ${IMAGE_FIELDS}
+    _id, _type, title, slug, description, date, cardColor,
+    image ${IMAGE_FIELDS},
+    galleryImages[] ${IMAGE_FIELDS}
   }`
+  return client.fetch(query)
+}
+
+export async function getEventBySlug(slug: string): Promise<Event | null> {
+  const query = `*[_type == "event" && slug.current == $slug][0] {
+    _id, _type, title, slug, description, date, cardColor,
+    image ${IMAGE_FIELDS},
+    galleryImages[] ${IMAGE_FIELDS}
+  }`
+  return client.fetch(query, { slug })
+}
+
+export async function getVideoUrl(): Promise<string | null> {
+  const query = `*[_type == "homeMetrics"][0].videoUrl`
   return client.fetch(query)
 }
 

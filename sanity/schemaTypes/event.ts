@@ -40,5 +40,17 @@ export const event = defineType({
       title: 'Data',
       type: 'datetime',
     }),
+    defineField({
+      name: 'cardColor',
+      title: 'Cor do Card (hex)',
+      type: 'string',
+      description: 'Cor de destaque para este evento. Ex: #BB0A24',
+    }),
+    defineField({
+      name: 'galleryImages',
+      title: 'Galeria de Imagens',
+      type: 'array',
+      of: [{ type: 'image', options: { hotspot: true } }],
+    }),
   ],
 })

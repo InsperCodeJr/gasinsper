@@ -4,7 +4,18 @@ export const homeMetrics = defineType({
   name: 'homeMetrics',
   title: 'Home - Nossos Números',
   type: 'document',
+  preview: {
+    prepare() {
+      return { title: 'Home — Números e Vídeo Institucional' }
+    },
+  },
   fields: [
+    defineField({
+      name: 'videoUrl',
+      title: 'URL do Vídeo Institucional',
+      type: 'url',
+      description: 'Link do YouTube ou Vimeo para o vídeo da seção Sobre Nós',
+    }),
     defineField({
       name: 'manualStats',
       title: 'Números Editáveis',

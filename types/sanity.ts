@@ -40,6 +40,7 @@ export interface Project {
     label: string
     value: string
   }>
+  cardColor?: string
   instagramHandle?: string
   partners?: Partner[]
   testimonials?: Array<{
@@ -62,8 +63,10 @@ export interface Event {
   title: string
   slug: { current: string }
   image?: SanityImage
+  galleryImages?: SanityImage[]
   description: string
   date?: string
+  cardColor?: string
 }
 
 export interface Partner {
@@ -112,5 +115,6 @@ export interface HomeMetricItem {
 export interface HomeMetrics {
   _id: string
   _type: 'homeMetrics'
+  videoUrl?: string
   manualStats?: HomeMetricItem[]
 }

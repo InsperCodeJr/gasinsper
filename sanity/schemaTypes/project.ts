@@ -89,6 +89,12 @@ export const project = defineType({
       ],
     }),
     defineField({
+      name: 'cardColor',
+      title: 'Cor do Card (hex)',
+      type: 'string',
+      description: 'Cor de destaque do card deste projeto. Ex: #BB0A24',
+    }),
+    defineField({
       name: 'volunteerInfo',
       title: 'Informações de Voluntariado',
       type: 'object',
