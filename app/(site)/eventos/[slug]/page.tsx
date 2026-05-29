@@ -1,12 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getEventBySlug, getAllEvents } from "@/sanity/lib/queries";
+import { getEventBySlug } from "@/sanity/lib/queries";
+import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 
 export async function generateStaticParams() {
-  const events = await getAllEvents();
-  return events.map((ev) => ({ slug: ev.slug.current }));
+  const slugs = await client.fetch<{ slug: { current: string } }[]>(
+    `*[_type == "event"]{ slug }`
+  );
+  return slugs.map((ev) => ({ slug: ev.slug.current }));
 }
 
 function formatDate(dateStr?: string | null) {
