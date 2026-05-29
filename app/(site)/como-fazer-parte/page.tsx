@@ -44,7 +44,7 @@ export default async function ComoFazerParte() {
   const displayProjects = projects.length > 0 ? projects : FALLBACK_PROJECTS;
   const hasSanityData = projects.length > 0;
   const projectsWithVolunteer = displayProjects.filter((p) => p.volunteerInfo?.description || p.instagramHandle);
-  const routineSteps = sanityRoutineSteps.length > 0 ? sanityRoutineSteps : FALLBACK_ROUTINE;
+  const routineSteps: Array<{ title: string; desc: string }> = sanityRoutineSteps.length > 0 ? sanityRoutineSteps : FALLBACK_ROUTINE;
   const hasRoutineSanityData = sanityRoutineSteps.length > 0;
 
   return (
@@ -158,7 +158,7 @@ export default async function ComoFazerParte() {
                 <div className="absolute left-5 top-5 bottom-5 hidden w-0.5 bg-[#E5E5E5] sm:block" />
                 <div className="space-y-4">
                   {routineSteps.map((item, i) => (
-                    <ScrollReveal key={"_key" in item ? item._key : i} direction="left" delay={i * 70}>
+                    <ScrollReveal key={item.title} direction="left" delay={i * 70}>
                       <div className="flex items-start gap-5">
                         <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-2 border-[#BB0A24] bg-white text-xs font-black text-[#BB0A24] shadow-sm">
                           {String(i + 1).padStart(2, "0")}
