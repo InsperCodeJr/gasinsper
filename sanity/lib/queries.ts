@@ -1,4 +1,4 @@
-import { client } from './client'
+import { sanityFetch } from './live'
 import { Project, Event, Partner, ONG, TeamMember, Area, HomeMetricItem, MemberRoutineStep } from '@/types/sanity'
 
 const IMAGE_FIELDS = `{
@@ -19,7 +19,8 @@ export async function getAllProjects(): Promise<Project[]> {
     testimonials[]{author, role, text, photo ${IMAGE_FIELDS}},
     volunteerInfo
   }`
-  return client.fetch(query)
+  const { data } = await sanityFetch({ query })
+  return data as Project[]
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
@@ -32,7 +33,8 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     testimonials[]{author, role, text, photo ${IMAGE_FIELDS}},
     volunteerInfo
   }`
-  return client.fetch(query, { slug })
+  const { data } = await sanityFetch({ query, params: { slug } })
+  return data as Project | null
 }
 
 // EVENTOS
@@ -43,7 +45,8 @@ export async function getAllEvents(): Promise<Event[]> {
     image ${IMAGE_FIELDS},
     galleryImages[] ${IMAGE_FIELDS}
   }`
-  return client.fetch(query)
+  const { data } = await sanityFetch({ query })
+  return data as Event[]
 }
 
 export async function getEventBySlug(slug: string): Promise<Event | null> {
@@ -52,12 +55,14 @@ export async function getEventBySlug(slug: string): Promise<Event | null> {
     image ${IMAGE_FIELDS},
     galleryImages[] ${IMAGE_FIELDS}
   }`
-  return client.fetch(query, { slug })
+  const { data } = await sanityFetch({ query, params: { slug } })
+  return data as Event | null
 }
 
 export async function getVideoUrl(): Promise<string | null> {
   const query = `*[_type == "homeMetrics"][0].videoFile.asset->url`
-  return client.fetch(query)
+  const { data } = await sanityFetch({ query })
+  return data as string | null
 }
 
 // PARCEIROS
@@ -67,7 +72,8 @@ export async function getAllPartners(): Promise<Partner[]> {
     _id, _type, name, description, website, isHistorical,
     logo ${IMAGE_FIELDS}
   }`
-  return client.fetch(query)
+  const { data } = await sanityFetch({ query })
+  return data as Partner[]
 }
 
 export async function getCurrentPartners(): Promise<Partner[]> {
@@ -75,7 +81,8 @@ export async function getCurrentPartners(): Promise<Partner[]> {
     _id, _type, name, description, website, isHistorical,
     logo ${IMAGE_FIELDS}
   }`
-  return client.fetch(query)
+  const { data } = await sanityFetch({ query })
+  return data as Partner[]
 }
 
 export async function getHistoricalPartners(): Promise<Partner[]> {
@@ -83,7 +90,8 @@ export async function getHistoricalPartners(): Promise<Partner[]> {
     _id, _type, name, description, website, isHistorical,
     logo ${IMAGE_FIELDS}
   }`
-  return client.fetch(query)
+  const { data } = await sanityFetch({ query })
+  return data as Partner[]
 }
 
 // ONGs
@@ -94,7 +102,8 @@ export async function getAllONGs(): Promise<ONG[]> {
     logo ${IMAGE_FIELDS},
     testimonials[]{author, text, photo ${IMAGE_FIELDS}}
   }`
-  return client.fetch(query)
+  const { data } = await sanityFetch({ query })
+  return data as ONG[]
 }
 
 // MEMBROS DA GESTÃO
@@ -105,7 +114,8 @@ export async function getAllTeamMembers(): Promise<TeamMember[]> {
     photo ${IMAGE_FIELDS},
     area->{_id, name, description}
   }`
-  return client.fetch(query)
+  const { data } = await sanityFetch({ query })
+  return data as TeamMember[]
 }
 
 // ÁREAS
@@ -114,15 +124,16 @@ export async function getAllAreas(): Promise<Area[]> {
   const query = `*[_type == "area"] | order(order asc, _createdAt asc) {
     _id, _type, name, description, order
   }`
-  return client.fetch(query)
+  const { data } = await sanityFetch({ query })
+  return data as Area[]
 }
 
 // ROTINA DO MEMBRO
 
 export async function getMemberRoutineSteps(): Promise<MemberRoutineStep[]> {
   const query = `*[_type == "memberRoutine"][0].steps[]{_key, title, desc}`
-  const steps = await client.fetch<MemberRoutineStep[] | null>(query)
-  return steps ?? []
+  const { data } = await sanityFetch({ query })
+  return (data as MemberRoutineStep[] | null) ?? []
 }
 
 // HOME
@@ -133,19 +144,17 @@ export async function getHomeImpactNumbers(): Promise<HomeMetricItem[]> {
     "manualStats": *[_type == "homeMetrics"][0].manualStats
   }`
 
-  const data = await client.fetch<{
-    projectCount: number
-    manualStats?: HomeMetricItem[]
-  }>(query)
+  const { data } = await sanityFetch({ query })
+  const result = data as { projectCount: number; manualStats?: HomeMetricItem[] }
 
-  const manualStats = data.manualStats ?? [
+  const manualStats = result.manualStats ?? [
     { label: 'Membros formados', value: '150+' },
     { label: 'ONGs impactadas', value: '40+' },
     { label: 'Voluntários envolvidos', value: '500+' },
   ]
 
   return [
-    { label: 'Projetos realizados', value: `${data.projectCount || '10+'}` },
+    { label: 'Projetos realizados', value: `${result.projectCount || '10+'}` },
     ...manualStats,
   ]
 }
