@@ -112,9 +112,15 @@ export interface HomeMetricItem {
   value: string
 }
 
+export interface MemberRoutineStep {
+  _key: string
+  title: string
+  desc: string
+}
+
 export interface HomeMetrics {
   _id: string
   _type: 'homeMetrics'
-  videoUrl?: string
+  videoFile?: { asset: { url: string } }
   manualStats?: HomeMetricItem[]
 }

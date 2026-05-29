@@ -11,10 +11,13 @@ export const homeMetrics = defineType({
   },
   fields: [
     defineField({
-      name: 'videoUrl',
-      title: 'URL do Vídeo Institucional',
-      type: 'url',
-      description: 'Link do YouTube ou Vimeo para o vídeo da seção Sobre Nós',
+      name: 'videoFile',
+      title: 'Vídeo Institucional',
+      type: 'file',
+      description: 'Faça upload do vídeo (MP4 recomendado) que aparece como fundo na seção Sobre Nós',
+      options: {
+        accept: 'video/*',
+      },
     }),
     defineField({
       name: 'manualStats',

@@ -1,5 +1,5 @@
 import { client } from './client'
-import { Project, Event, Partner, ONG, TeamMember, Area, HomeMetricItem } from '@/types/sanity'
+import { Project, Event, Partner, ONG, TeamMember, Area, HomeMetricItem, MemberRoutineStep } from '@/types/sanity'
 
 const IMAGE_FIELDS = `{
   asset->{_id, _ref, url, metadata{dimensions}},
@@ -56,7 +56,7 @@ export async function getEventBySlug(slug: string): Promise<Event | null> {
 }
 
 export async function getVideoUrl(): Promise<string | null> {
-  const query = `*[_type == "homeMetrics"][0].videoUrl`
+  const query = `*[_type == "homeMetrics"][0].videoFile.asset->url`
   return client.fetch(query)
 }
 
@@ -115,6 +115,14 @@ export async function getAllAreas(): Promise<Area[]> {
     _id, _type, name, description, order
   }`
   return client.fetch(query)
+}
+
+// ROTINA DO MEMBRO
+
+export async function getMemberRoutineSteps(): Promise<MemberRoutineStep[]> {
+  const query = `*[_type == "memberRoutine"][0].steps[]{_key, title, desc}`
+  const steps = await client.fetch<MemberRoutineStep[] | null>(query)
+  return steps ?? []
 }
 
 // HOME

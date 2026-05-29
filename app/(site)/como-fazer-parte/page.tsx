@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { getAllProjects } from "@/sanity/lib/queries";
+import { getAllProjects, getMemberRoutineSteps } from "@/sanity/lib/queries";
 import ScrollReveal from "@/components/ScrollReveal";
 
-const MEMBER_ROUTINE = [
-  { step: "01", title: "Onboarding", desc: "Integração com a cultura e estrutura do GAS, conhecendo membros e metodologias." },
-  { step: "02", title: "Alocação em Projeto", desc: "Cada membro é alocado em um ou mais projetos conforme perfil e interesse." },
-  { step: "03", title: "Execução", desc: "Trabalho semanal com reuniões, entregas e acompanhamento junto à ONG parceira." },
-  { step: "04", title: "Review e Feedback", desc: "Ciclos regulares de revisão para garantir qualidade e desenvolvimento pessoal." },
-  { step: "05", title: "Demo Day", desc: "Apresentação dos resultados do semestre para parceiros e toda a comunidade GAS." },
+const FALLBACK_ROUTINE = [
+  { title: "Onboarding", desc: "Integração com a cultura e estrutura do GAS, conhecendo membros e metodologias." },
+  { title: "Alocação em Projeto", desc: "Cada membro é alocado em um ou mais projetos conforme perfil e interesse." },
+  { title: "Execução", desc: "Trabalho semanal com reuniões, entregas e acompanhamento junto à ONG parceira." },
+  { title: "Review e Feedback", desc: "Ciclos regulares de revisão para garantir qualidade e desenvolvimento pessoal." },
+  { title: "Demo Day", desc: "Apresentação dos resultados do semestre para parceiros e toda a comunidade GAS." },
 ];
 
 const SELECTION_STEPS = [
@@ -37,10 +37,15 @@ const FALLBACK_PROJECTS = [
 ];
 
 export default async function ComoFazerParte() {
-  const projects = await getAllProjects();
+  const [projects, sanityRoutineSteps] = await Promise.all([
+    getAllProjects(),
+    getMemberRoutineSteps(),
+  ]);
   const displayProjects = projects.length > 0 ? projects : FALLBACK_PROJECTS;
   const hasSanityData = projects.length > 0;
   const projectsWithVolunteer = displayProjects.filter((p) => p.volunteerInfo?.description || p.instagramHandle);
+  const routineSteps = sanityRoutineSteps.length > 0 ? sanityRoutineSteps : FALLBACK_ROUTINE;
+  const hasRoutineSanityData = sanityRoutineSteps.length > 0;
 
   return (
     <div className="bg-white text-[#1A1A1A]">
@@ -136,26 +141,38 @@ export default async function ComoFazerParte() {
             <ScrollReveal direction="none">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">Sua Jornada</p>
               <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">Rotina de um Membro</h2>
+              {!hasRoutineSanityData && (
+                <p className="mt-2 text-xs italic text-[#555555]">
+                  Conteúdo de exemplo — cadastre as etapas reais em <strong>Rotina do Membro</strong> no Sanity Studio.
+                </p>
+              )}
             </ScrollReveal>
 
-            <div className="relative mt-10">
-              <div className="absolute left-5 top-5 bottom-5 hidden w-0.5 bg-[#E5E5E5] sm:block" />
-              <div className="space-y-4">
-                {MEMBER_ROUTINE.map((item, i) => (
-                  <ScrollReveal key={i} direction="left" delay={i * 70}>
-                    <div className="flex items-start gap-5">
-                      <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-2 border-[#BB0A24] bg-white text-xs font-black text-[#BB0A24] shadow-sm">
-                        {item.step}
-                      </div>
-                      <div className="flex-1 rounded-2xl border border-[#E5E5E5] bg-white p-5 shadow-sm">
-                        <p className="font-black">{item.title}</p>
-                        <p className="mt-1 text-sm leading-6 text-[#555555]">{item.desc}</p>
-                      </div>
-                    </div>
-                  </ScrollReveal>
-                ))}
+            {routineSteps.length === 0 ? (
+              <div className="mt-10 rounded-2xl border border-dashed border-[#E5E5E5] bg-white p-10 text-center">
+                <p className="text-sm text-[#555555]">Nenhuma etapa cadastrada ainda.</p>
+                <p className="mt-1 text-xs text-[#AAAAAA]">Adicione etapas em <strong>Rotina do Membro</strong> no Sanity Studio.</p>
               </div>
-            </div>
+            ) : (
+              <div className="relative mt-10">
+                <div className="absolute left-5 top-5 bottom-5 hidden w-0.5 bg-[#E5E5E5] sm:block" />
+                <div className="space-y-4">
+                  {routineSteps.map((item, i) => (
+                    <ScrollReveal key={"_key" in item ? item._key : i} direction="left" delay={i * 70}>
+                      <div className="flex items-start gap-5">
+                        <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-2 border-[#BB0A24] bg-white text-xs font-black text-[#BB0A24] shadow-sm">
+                          {String(i + 1).padStart(2, "0")}
+                        </div>
+                        <div className="flex-1 rounded-2xl border border-[#E5E5E5] bg-white p-5 shadow-sm">
+                          <p className="font-black">{item.title}</p>
+                          <p className="mt-1 text-sm leading-6 text-[#555555]">{item.desc}</p>
+                        </div>
+                      </div>
+                    </ScrollReveal>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
