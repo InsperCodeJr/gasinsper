@@ -150,12 +150,20 @@ export interface SiteSettings {
   contactEmail: string | null
 }
 
+function normalizeInstagramHandle(value: string | null | undefined): string | null {
+  if (!value) return null
+  const trimmed = value.trim()
+  const fromUrl = trimmed.match(/instagram\.com\/([^/?#]+)/i)
+  const handle = fromUrl ? fromUrl[1] : trimmed
+  return handle.replace(/^@/, '') || null
+}
+
 export async function getSiteSettings(): Promise<SiteSettings> {
   const query = `*[_type == "siteSettings"][0]{instagramHandle, linkedinUrl, contactEmail}`
   const { data } = await sanityFetch({ query })
   const result = data as SiteSettings | null
   return {
-    instagramHandle: result?.instagramHandle ?? null,
+    instagramHandle: normalizeInstagramHandle(result?.instagramHandle),
     linkedinUrl: result?.linkedinUrl ?? null,
     contactEmail: result?.contactEmail ?? null,
   }

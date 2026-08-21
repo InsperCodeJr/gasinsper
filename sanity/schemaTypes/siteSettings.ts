@@ -13,7 +13,7 @@ export const siteSettings = defineType({
     defineField({
       name: 'instagramHandle',
       title: 'Instagram do GAS',
-      description: 'Usado no rodapé e no botão "Acompanhe o @..." em Como Fazer Parte (sem o @). Ex: gas.insper',
+      description: 'Usado no rodapé e no botão "Acompanhe o @..." em Como Fazer Parte. Pode colar só o usuário (gas.insper) ou o link completo (https://instagram.com/gas.insper) — o site extrai o usuário automaticamente.',
       type: 'string',
       initialValue: 'gas.insper',
     }),
