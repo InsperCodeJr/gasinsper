@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 interface Props {
-  value: string;
+  value?: string | number | null;
   className?: string;
 }
 
@@ -14,14 +14,16 @@ function parse(val: string) {
 }
 
 export default function CountUp({ value, className = "" }: Props) {
+  // O conteúdo vem do Sanity e pode chegar vazio/nulo — normaliza antes de usar.
+  const text = value == null ? "" : String(value);
   const ref = useRef<HTMLSpanElement>(null);
-  const [shown, setShown] = useState(value);
+  const [shown, setShown] = useState(text);
   const done = useRef(false);
 
   useEffect(() => {
-    const parts = parse(value);
+    const parts = parse(text);
     if (!parts || parts.num < 2) {
-      setShown(value);
+      setShown(text);
       return;
     }
 
@@ -52,7 +54,7 @@ export default function CountUp({ value, className = "" }: Props) {
 
     obs.observe(el);
     return () => obs.disconnect();
-  }, [value]);
+  }, [text]);
 
   return (
     <span ref={ref} className={className}>

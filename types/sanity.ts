@@ -37,8 +37,8 @@ export interface Project {
   objective?: string
   targetAudience?: string
   stats?: Array<{
-    label: string
-    value: string
+    label?: string
+    value?: string
   }>
   cardColor?: string
   instagramHandle?: string

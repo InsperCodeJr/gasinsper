@@ -90,6 +90,8 @@ export default async function Projetos() {
 
 function ProjectSection({ project, reversed }: { project: Project; reversed: boolean }) {
   const accent = project.cardColor ?? "#BB0A24";
+  // Entradas incompletas no Sanity (sem label/valor) geravam cards vazios e quebravam a página.
+  const stats = (project.stats ?? []).filter((s) => s?.value || s?.label);
   const logoUrl = project.logo
     ? urlFor(project.logo).width(900).height(675).fit("crop").url()
     : null;
@@ -164,7 +166,7 @@ function ProjectSection({ project, reversed }: { project: Project; reversed: boo
       </div>
 
       {/* ── Stats ── */}
-      {project.stats && project.stats.length > 0 && (
+      {stats.length > 0 && (
         <div className="border-t border-[#E5E5E5] bg-gradient-to-br from-[#F9F9F9] to-white py-10 sm:py-12">
           <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal direction="none">
@@ -173,7 +175,7 @@ function ProjectSection({ project, reversed }: { project: Project; reversed: boo
               </p>
             </ScrollReveal>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {project.stats.map((stat, i) => (
+              {stats.map((stat, i) => (
                 <ScrollReveal key={i} direction="up" delay={i * 80}>
                   <div className="group rounded-2xl border border-[#E5E5E5] bg-white p-6 shadow-sm transition-all duration-300 hover:border-[#BB0A24]/20 hover:shadow-md hover:-translate-y-0.5">
                     <p className="text-4xl font-black text-[#BB0A24]">
