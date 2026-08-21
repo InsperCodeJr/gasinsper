@@ -7,7 +7,8 @@ import { ong } from './ong'
 import { teamMember } from './teamMember'
 import { homeMetrics } from './homeMetrics'
 import { memberRoutine } from './memberRoutine'
+import { siteSettings } from './siteSettings'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [area, project, event, partner, ong, teamMember, homeMetrics, memberRoutine],
+  types: [area, project, event, partner, ong, teamMember, homeMetrics, memberRoutine, siteSettings],
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { getSiteSettings } from "@/sanity/lib/queries";
 
 const quickLinks = [
   { href: "/sobre-nos", label: "Sobre Nós" },
@@ -34,7 +35,12 @@ function IconMail({ className }: { className?: string }) {
   );
 }
 
-export default function Footer() {
+export default async function Footer() {
+  const siteSettings = await getSiteSettings();
+  const instagramHandle = siteSettings.instagramHandle ?? "gas.insper";
+  const linkedinUrl = siteSettings.linkedinUrl ?? "https://linkedin.com";
+  const contactEmail = siteSettings.contactEmail ?? "contato@gas.org.br";
+
   return (
     <footer className="bg-[#111111] text-white">
       <div className="h-0.5 w-full bg-[#BB0A24]" />
@@ -64,7 +70,7 @@ export default function Footer() {
             {/* Social icons */}
             <div className="mt-6 flex items-center gap-2">
               <a
-                href="https://instagram.com/gas.insper"
+                href={`https://instagram.com/${instagramHandle}`}
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Instagram do GAS"
@@ -73,7 +79,7 @@ export default function Footer() {
                 <IconInstagram className="h-4 w-4" />
               </a>
               <a
-                href="https://linkedin.com"
+                href={linkedinUrl}
                 target="_blank"
                 rel="noreferrer"
                 aria-label="LinkedIn do GAS"
@@ -82,7 +88,7 @@ export default function Footer() {
                 <IconLinkedIn className="h-4 w-4" />
               </a>
               <a
-                href="mailto:contato@gas.org.br"
+                href={`mailto:${contactEmail}`}
                 aria-label="E-mail do GAS"
                 className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 text-white/50 transition-all duration-200 hover:border-[#BB0A24] hover:bg-[#BB0A24] hover:text-white"
               >
@@ -99,22 +105,22 @@ export default function Footer() {
             <ul className="mt-4 space-y-3">
               <li>
                 <a
-                  href="mailto:contato@gas.org.br"
+                  href={`mailto:${contactEmail}`}
                   className="flex items-center gap-2.5 text-sm text-white/55 transition-colors hover:text-white"
                 >
                   <IconMail className="h-4 w-4 shrink-0" />
-                  contato@gas.org.br
+                  {contactEmail}
                 </a>
               </li>
               <li>
                 <a
-                  href="https://instagram.com/gas.insper"
+                  href={`https://instagram.com/${instagramHandle}`}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-2.5 text-sm text-white/55 transition-colors hover:text-white"
                 >
                   <IconInstagram className="h-4 w-4 shrink-0" />
-                  @gas.insper
+                  @{instagramHandle}
                 </a>
               </li>
               <li className="pt-1 text-xs text-white/25">

@@ -142,6 +142,25 @@ export async function getMemberRoutineTitle(): Promise<string | null> {
   return (data as string | null) ?? null
 }
 
+// CONFIGURAÇÕES GERAIS (CONTATO E REDES SOCIAIS)
+
+export interface SiteSettings {
+  instagramHandle: string | null
+  linkedinUrl: string | null
+  contactEmail: string | null
+}
+
+export async function getSiteSettings(): Promise<SiteSettings> {
+  const query = `*[_type == "siteSettings"][0]{instagramHandle, linkedinUrl, contactEmail}`
+  const { data } = await sanityFetch({ query })
+  const result = data as SiteSettings | null
+  return {
+    instagramHandle: result?.instagramHandle ?? null,
+    linkedinUrl: result?.linkedinUrl ?? null,
+    contactEmail: result?.contactEmail ?? null,
+  }
+}
+
 // HOME
 
 export async function getHomeImpactNumbers(): Promise<HomeMetricItem[]> {
