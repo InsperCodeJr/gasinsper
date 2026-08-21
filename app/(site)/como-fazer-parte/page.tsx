@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getAllProjects, getMemberRoutineSteps } from "@/sanity/lib/queries";
+import { getAllProjects, getMemberRoutineSteps, getMemberRoutineTitle } from "@/sanity/lib/queries";
 import ScrollReveal from "@/components/ScrollReveal";
 
 const FALLBACK_ROUTINE = [
@@ -37,15 +37,17 @@ const FALLBACK_PROJECTS = [
 ];
 
 export default async function ComoFazerParte() {
-  const [projects, sanityRoutineSteps] = await Promise.all([
+  const [projects, sanityRoutineSteps, sanityRoutineTitle] = await Promise.all([
     getAllProjects(),
     getMemberRoutineSteps(),
+    getMemberRoutineTitle(),
   ]);
   const displayProjects = projects.length > 0 ? projects : FALLBACK_PROJECTS;
   const hasSanityData = projects.length > 0;
   const projectsWithVolunteer = displayProjects.filter((p) => p.volunteerInfo?.description || p.instagramHandle);
   const routineSteps: Array<{ title: string; desc: string }> = sanityRoutineSteps.length > 0 ? sanityRoutineSteps : FALLBACK_ROUTINE;
   const hasRoutineSanityData = sanityRoutineSteps.length > 0;
+  const routineTitle = sanityRoutineTitle ?? "Rotina de um Membro";
 
   return (
     <div className="bg-white text-[#1A1A1A]">
@@ -140,7 +142,7 @@ export default async function ComoFazerParte() {
           <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal direction="none">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">Sua Jornada</p>
-              <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">Rotina de um Membro</h2>
+              <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">{routineTitle}</h2>
               {!hasRoutineSanityData && (
                 <p className="mt-2 text-xs italic text-[#555555]">
                   Conteúdo de exemplo — cadastre as etapas reais em <strong>Rotina do Membro</strong> no Sanity Studio.

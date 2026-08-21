@@ -136,6 +136,12 @@ export async function getMemberRoutineSteps(): Promise<MemberRoutineStep[]> {
   return (data as MemberRoutineStep[] | null) ?? []
 }
 
+export async function getMemberRoutineTitle(): Promise<string | null> {
+  const query = `*[_type == "memberRoutine"][0].sectionTitle`
+  const { data } = await sanityFetch({ query })
+  return (data as string | null) ?? null
+}
+
 // HOME
 
 export async function getHomeImpactNumbers(): Promise<HomeMetricItem[]> {
