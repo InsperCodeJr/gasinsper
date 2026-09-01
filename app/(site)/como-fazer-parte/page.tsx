@@ -1,55 +1,27 @@
 import Link from "next/link";
-import { getAllProjects, getMemberRoutineSteps, getMemberRoutineTitle, getSiteSettings } from "@/sanity/lib/queries";
+import {
+  getAllProjects,
+  getMemberRoutineSteps,
+  getMemberRoutineTitle,
+  getPageContent,
+  getSiteSettings,
+} from "@/lib/content";
 import ScrollReveal from "@/components/ScrollReveal";
-
-const FALLBACK_ROUTINE = [
-  { title: "Onboarding", desc: "Integração com a cultura e estrutura do GAS, conhecendo membros e metodologias." },
-  { title: "Alocação em Projeto", desc: "Cada membro é alocado em um ou mais projetos conforme perfil e interesse." },
-  { title: "Execução", desc: "Trabalho semanal com reuniões, entregas e acompanhamento junto à ONG parceira." },
-  { title: "Review e Feedback", desc: "Ciclos regulares de revisão para garantir qualidade e desenvolvimento pessoal." },
-  { title: "Demo Day", desc: "Apresentação dos resultados do semestre para parceiros e toda a comunidade GAS." },
-];
-
-const SELECTION_STEPS = [
-  { num: "1", title: "Inscrição", desc: "Formulário disponível no Instagram do GAS durante o período de seleção." },
-  { num: "2", title: "Dinâmica em Grupo", desc: "Atividade coletiva para avaliar colaboração, raciocínio e alinhamento de valores." },
-  { num: "3", title: "Entrevista Individual", desc: "Conversa com membros da gestão sobre motivações, experiências e expectativas." },
-  { num: "4", title: "Resultado e Onboarding", desc: "Comunicação do resultado e início da jornada como membro do GAS." },
-];
-
-const MEMBER_BENEFITS = [
-  { icon: "🎯", title: "Projetos reais", desc: "Trabalhe em projetos com ONGs parceiras e impacto mensurável desde o primeiro semestre." },
-  { icon: "🤝", title: "Rede poderosa", desc: "Conecte-se com parceiros corporativos, líderes sociais e estudantes excepcionais." },
-  { icon: "📈", title: "Desenvolvimento", desc: "Desenvolva competências de liderança, gestão de projetos e comunicação de alto nível." },
-  { icon: "🏆", title: "Reconhecimento", desc: "Sua atuação no GAS é reconhecida por empresas e organizações do ecossistema de impacto." },
-];
-
-const VOLUNTEER_METRICS = [
-  { n: "3–5h", label: "por semana", desc: "Dedicação média esperada" },
-  { n: "Semestral", label: "comprometimento", desc: "Projetos têm duração definida" },
-  { n: "Remoto", label: "ou presencial", desc: "Flexibilidade de atuação" },
-];
-
-const FALLBACK_PROJECTS = [
-  { _id: "fp1", name: "Mentoria Social", description: "Capacitação e acompanhamento de jovens em desenvolvimento acadêmico e profissional.", slug: { current: "mentoria-social" }, instagramHandle: "gas.mentoria", volunteerInfo: { description: "Buscamos voluntários com interesse em educação e mentoria.", demand: "Vagas abertas" } },
-  { _id: "fp2", name: "Educação Financeira", description: "Workshops e oficinas para fortalecer autonomia financeira de comunidades.", slug: { current: "educacao-financeira" }, instagramHandle: "gas.educacaofinanceira", volunteerInfo: { description: "Voluntários ajudam a facilitar oficinas e produzir materiais.", demand: "Vagas abertas" } },
-  { _id: "fp3", name: "Empreendedorismo Local", description: "Apoio prático para pequenos empreendedores sociais estruturarem suas iniciativas.", slug: { current: "empreendedorismo-local" }, instagramHandle: "gas.empreendedorismo", volunteerInfo: { description: "Voluntários apoiam sessões de consultoria e desenvolvimento de planos de negócio.", demand: "Vagas abertas" } },
-];
+import HeroBackground from "@/components/HeroBackground";
 
 export default async function ComoFazerParte() {
-  const [projects, sanityRoutineSteps, sanityRoutineTitle, siteSettings] = await Promise.all([
+  const [projects, sanityRoutineSteps, sanityRoutineTitle, siteSettings, page] = await Promise.all([
     getAllProjects(),
     getMemberRoutineSteps(),
     getMemberRoutineTitle(),
     getSiteSettings(),
+    getPageContent("join"),
   ]);
-  const displayProjects = projects.length > 0 ? projects : FALLBACK_PROJECTS;
-  const hasSanityData = projects.length > 0;
+  const displayProjects = projects;
   const projectsWithVolunteer = displayProjects.filter((p) => p.volunteerInfo?.description || p.instagramHandle);
-  const routineSteps: Array<{ title: string; desc: string }> = sanityRoutineSteps.length > 0 ? sanityRoutineSteps : FALLBACK_ROUTINE;
-  const hasRoutineSanityData = sanityRoutineSteps.length > 0;
+  const routineSteps: Array<{ title: string; desc: string }> = sanityRoutineSteps;
   const routineTitle = sanityRoutineTitle ?? "Rotina de um Membro";
-  const selectionInstagramHandle = siteSettings.instagramHandle ?? "gas.insper";
+  const selectionInstagramHandle = siteSettings.instagramHandle ?? "gasinsper";
 
   return (
     <div className="bg-white text-[#1A1A1A]">
@@ -60,28 +32,29 @@ export default async function ComoFazerParte() {
           className="pointer-events-none absolute left-1/2 top-0 h-64 w-96 -translate-x-1/2 opacity-20"
           style={{ background: "radial-gradient(ellipse at 50% 0%, #BB0A24 0%, transparent 70%)" }}
         />
+        <HeroBackground mediaUrl={page.hero.mediaUrl} />
         <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="animate-fade-in text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-            Como Fazer Parte
+            {page.hero.eyebrow}
           </p>
           <h1 className="animate-fade-in-up delay-100 mt-4 max-w-3xl text-3xl font-black leading-tight sm:text-4xl lg:text-5xl">
-            Faça parte de algo maior
+            {page.hero.title}
           </h1>
           <p className="animate-fade-in-up delay-200 mt-6 max-w-2xl text-base leading-7 text-white/70">
-            Há duas formas de contribuir com o GAS: como membro da organização ou como voluntário em nossos projetos. Ambos os caminhos levam ao mesmo lugar — impacto real.
+            {page.hero.text}
           </p>
           <div className="animate-fade-in-up delay-300 mt-10 flex flex-wrap gap-4">
             <a
               href="#membro"
               className="rounded-xl border border-white/30 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10 hover:-translate-y-px"
             >
-              Quero ser Membro
+              {page.hero.memberLabel}
             </a>
             <a
               href="#voluntario"
               className="rounded-xl border border-[#BB0A24] bg-[#BB0A24] px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#8F071B] hover:-translate-y-px"
             >
-              Quero ser Voluntário
+              {page.hero.volunteerLabel}
             </a>
           </div>
         </div>
@@ -93,7 +66,7 @@ export default async function ComoFazerParte() {
         <div className="border-b border-[#E5E5E5] bg-[#BB0A24]">
           <div className="mx-auto max-w-7xl px-4 py-3.5 sm:px-6 lg:px-8">
             <span className="text-xs font-black uppercase tracking-[0.3em] text-white/90">
-              Seção 01 — Membros
+              {page.member.tabLabel}
             </span>
           </div>
         </div>
@@ -103,22 +76,21 @@ export default async function ComoFazerParte() {
           <div className="mx-auto grid w-full max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
             <ScrollReveal direction="left">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-                O que é ser membro
+                {page.member.eyebrow}
               </p>
               <h2 className="mt-4 text-2xl font-black leading-tight sm:text-3xl lg:text-4xl">
-                Mais do que um estudante voluntário
+                {page.member.title}
               </h2>
-              <p className="mt-5 text-base leading-7 text-[#555555]">
-                Ser membro do GAS é assumir um papel de liderança e comprometimento. Você integra uma equipe multidisciplinar, trabalha com metodologias de gestão reais e entrega resultados concretos para ONGs parceiras.
-              </p>
-              <p className="mt-4 text-base leading-7 text-[#555555]">
-                A estrutura do GAS é composta por uma <strong className="text-[#1A1A1A]">Matriz</strong> — que coordena a estratégia e governança — e quatro <strong className="text-[#1A1A1A]">Áreas</strong> especializadas, cada uma gerenciando projetos e iniciativas próprias.
-              </p>
+              {page.member.paragraphs.map((paragraph, i) => (
+                <p key={i} className={`text-base leading-7 text-[#555555] ${i === 0 ? "mt-5" : "mt-4"}`}>
+                  {paragraph}
+                </p>
+              ))}
               <Link
                 href="/sobre-nos#areas"
                 className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#BB0A24] hover:underline"
               >
-                Conhecer as áreas
+                {page.member.linkLabel}
                 <svg className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
@@ -126,12 +98,12 @@ export default async function ComoFazerParte() {
             </ScrollReveal>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {MEMBER_BENEFITS.map((item, i) => (
+              {page.member.benefits.map((item, i) => (
                 <ScrollReveal key={item.title} direction="up" delay={i * 80}>
                   <div className="group h-full rounded-2xl border border-[#E5E5E5] bg-white p-5 shadow-sm transition-all duration-300 hover:border-[#BB0A24]/20 hover:shadow-md hover:-translate-y-0.5">
-                    <span className="text-2xl">{item.icon}</span>
-                    <p className="mt-3 font-black">{item.title}</p>
-                    <p className="mt-1.5 text-sm leading-5 text-[#555555]">{item.desc}</p>
+                    <div className="h-0.5 w-8 bg-[#BB0A24] transition-all duration-300 group-hover:w-12" />
+                    <p className="mt-4 font-black">{item.title}</p>
+                    <p className="mt-1.5 text-sm leading-6 text-[#555555]">{item.desc}</p>
                   </div>
                 </ScrollReveal>
               ))}
@@ -143,19 +115,14 @@ export default async function ComoFazerParte() {
         <div className="border-b border-[#E5E5E5] bg-[#F9F9F9] py-14 sm:py-20">
           <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal direction="none">
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">Sua Jornada</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">{page.routine.eyebrow}</p>
               <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">{routineTitle}</h2>
-              {!hasRoutineSanityData && (
-                <p className="mt-2 text-xs italic text-[#555555]">
-                  Conteúdo de exemplo — cadastre as etapas reais em <strong>Rotina do Membro</strong> no Sanity Studio.
-                </p>
-              )}
             </ScrollReveal>
 
             {routineSteps.length === 0 ? (
               <div className="mt-10 rounded-2xl border border-dashed border-[#E5E5E5] bg-white p-10 text-center">
                 <p className="text-sm text-[#555555]">Nenhuma etapa cadastrada ainda.</p>
-                <p className="mt-1 text-xs text-[#AAAAAA]">Adicione etapas em <strong>Rotina do Membro</strong> no Sanity Studio.</p>
+                <p className="mt-1 text-xs text-[#AAAAAA]">Adicione as etapas em Rotina do Membro, no painel de administração.</p>
               </div>
             ) : (
               <div className="relative mt-10">
@@ -185,17 +152,17 @@ export default async function ComoFazerParte() {
           <div className="mx-auto grid w-full max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
             <ScrollReveal direction="left">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-                Como Entrar
+                {page.selection.eyebrow}
               </p>
-              <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">Processo Seletivo</h2>
+              <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">{page.selection.title}</h2>
               <p className="mt-5 text-base leading-7 text-[#555555]">
-                Abrimos seleção todo semestre. O processo é desenhado para identificar candidatos com potencial, engajamento e alinhamento aos valores do GAS — não apenas currículo.
+                {page.selection.text}
               </p>
               <div className="mt-8 space-y-4">
-                {SELECTION_STEPS.map((step) => (
-                  <div key={step.num} className="flex items-start gap-4">
+                {page.selection.steps.map((step, i) => (
+                  <div key={step.title} className="flex items-start gap-4">
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#BB0A24] text-sm font-black text-white shadow-sm">
-                      {step.num}
+                      {i + 1}
                     </div>
                     <div>
                       <p className="font-black">{step.title}</p>
@@ -208,11 +175,9 @@ export default async function ComoFazerParte() {
 
             <ScrollReveal direction="right" delay={120} className="flex flex-col justify-center gap-5">
               <div className="rounded-2xl border border-[#E5E5E5] bg-[#F9F9F9] p-8">
-                <p className="text-xs font-semibold uppercase tracking-widest text-[#555555]">Quando?</p>
-                <p className="mt-2 text-2xl font-black">Todo semestre</p>
-                <p className="mt-2 text-sm text-[#555555]">
-                  As inscrições são anunciadas no Instagram do GAS. Fique de olho para não perder as próximas datas!
-                </p>
+                <p className="text-xs font-semibold uppercase tracking-widest text-[#555555]">{page.selection.whenLabel}</p>
+                <p className="mt-2 text-2xl font-black">{page.selection.whenTitle}</p>
+                <p className="mt-2 text-sm text-[#555555]">{page.selection.whenText}</p>
               </div>
               <a
                 href={`https://instagram.com/${selectionInstagramHandle}`}
@@ -225,7 +190,7 @@ export default async function ComoFazerParte() {
                 </svg>
                 Acompanhe o @{selectionInstagramHandle}
               </a>
-              <p className="text-center text-xs text-[#555555]">Inscrições abertas exclusivamente pelo Instagram</p>
+              <p className="text-center text-xs text-[#555555]">{page.selection.instagramNote}</p>
             </ScrollReveal>
           </div>
         </div>
@@ -237,42 +202,27 @@ export default async function ComoFazerParte() {
         <div className="border-b border-[#E5E5E5] bg-[#1A1A1A]">
           <div className="mx-auto max-w-7xl px-4 py-3.5 sm:px-6 lg:px-8">
             <span className="text-xs font-black uppercase tracking-[0.3em] text-[#BB0A24]">
-              Seção 02 — Voluntários
+              {page.volunteer.tabLabel}
             </span>
           </div>
         </div>
 
         {/* Intro */}
         <div className="border-b border-[#E5E5E5] py-14 sm:py-20">
-          <div className="mx-auto grid w-full max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.5fr_1fr] lg:px-8">
-            <ScrollReveal direction="left">
+          <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+            <ScrollReveal direction="left" className="max-w-3xl">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-                Voluntariado
+                {page.volunteer.eyebrow}
               </p>
               <h2 className="mt-4 text-2xl font-black leading-tight sm:text-3xl lg:text-4xl">
-                O voluntariado que gera impacto real
+                {page.volunteer.title}
               </h2>
-              <p className="mt-5 text-base leading-7 text-[#555555]">
-                Diferente do voluntariado tradicional, as oportunidades do GAS são estruturadas, com papéis claros e entregas definidas. Cada voluntário é parte essencial da execução de um projeto social.
-              </p>
-              <p className="mt-4 text-base leading-7 text-[#555555]">
-                Você não precisa ser estudante do Insper — qualquer pessoa com vontade de contribuir e aprender pode se envolver. O que importa é o comprometimento com o impacto.
-              </p>
-            </ScrollReveal>
-
-            <div className="space-y-4">
-              {VOLUNTEER_METRICS.map((item, i) => (
-                <ScrollReveal key={item.label} direction="right" delay={i * 80}>
-                  <div className="rounded-2xl border border-[#E5E5E5] bg-white p-4 shadow-sm transition-all duration-300 hover:border-[#BB0A24]/20 hover:shadow-md sm:p-5">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-3xl font-black text-[#BB0A24]">{item.n}</span>
-                      <span className="text-sm text-[#555555]">{item.label}</span>
-                    </div>
-                    <p className="mt-1 text-xs text-[#555555]">{item.desc}</p>
-                  </div>
-                </ScrollReveal>
+              {page.volunteer.paragraphs.map((paragraph, i) => (
+                <p key={i} className={`text-base leading-7 text-[#555555] ${i === 0 ? "mt-5" : "mt-4"}`}>
+                  {paragraph}
+                </p>
               ))}
-            </div>
+            </ScrollReveal>
           </div>
         </div>
 
@@ -281,14 +231,9 @@ export default async function ComoFazerParte() {
           <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal direction="none">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-                Oportunidades
+                {page.opportunities.eyebrow}
               </p>
-              <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">Voluntariado por Projeto</h2>
-              {!hasSanityData && (
-                <p className="mt-2 text-xs italic text-[#555555]">
-                  Conteúdo de exemplo — os projetos reais aparecerão automaticamente quando cadastrados no Sanity Studio.
-                </p>
-              )}
+              <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">{page.opportunities.title}</h2>
             </ScrollReveal>
 
             <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -320,10 +265,18 @@ export default async function ComoFazerParte() {
                         </a>
                       )}
                       <Link
-                        href={`/projetos#${project.slug?.current ?? ""}`}
+                        href={`/projetos#${project.slug}`}
                         className="inline-flex items-center gap-1 text-xs text-[#555555] transition-colors hover:text-[#BB0A24]"
                       >
-                        Ver o projeto completo →
+                        Ver o projeto completo
+                        <svg
+                          className="h-3.5 w-3.5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
                       </Link>
                     </div>
                   </div>

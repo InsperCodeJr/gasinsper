@@ -1,15 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getEventBySlug } from "@/sanity/lib/queries";
-import { client } from "@/sanity/lib/client";
-import { urlFor } from "@/sanity/lib/image";
+import { getAllEvents, getEventBySlug } from "@/lib/content";
 
 export async function generateStaticParams() {
-  const slugs = await client.fetch<{ slug: { current: string } }[]>(
-    `*[_type == "event"]{ slug }`
-  );
-  return slugs.map((ev) => ({ slug: ev.slug.current }));
+  const events = await getAllEvents();
+  return events.map((ev) => ({ slug: ev.slug }));
 }
 
 function formatDate(dateStr?: string | null) {
@@ -33,9 +29,7 @@ export default async function EventoDetalhe({
   const accent = event.cardColor ?? "#BB0A24";
   const date = formatDate(event.date);
 
-  const heroUrl = event.image
-    ? urlFor(event.image).width(1600).height(800).fit("crop").url()
-    : null;
+  const heroUrl = event.image ?? null;
 
   const galleryImages = event.galleryImages ?? [];
 
@@ -109,8 +103,8 @@ export default async function EventoDetalhe({
               {galleryImages.map((img, i) => (
                 <div key={i} className="relative aspect-square overflow-hidden rounded-xl">
                   <Image
-                    src={urlFor(img).width(600).height(600).fit("crop").url()}
-                    alt={`${event.title} — foto ${i + 1}`}
+                    src={img}
+                    alt={`${event.title}, foto ${i + 1}`}
                     fill
                     className="object-cover transition-transform duration-500 hover:scale-105"
                   />

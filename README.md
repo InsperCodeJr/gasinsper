@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Site institucional GAS
 
-## Getting Started
+Site institucional do GAS (Grupo de Ação Social) em Next.js 16, com painel de
+administração próprio em `/admin`.
 
-First, run the development server:
+## Rodando localmente
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+O site sobe em http://localhost:3000 e o painel em http://localhost:3000/admin.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Sem nenhuma variável de ambiente o projeto funciona por completo: o conteúdo fica
+em `local-content/content.json`, os arquivos enviados em `public/uploads`, e o
+painel abre direto, sem login. Os dois diretórios ficam fora do Git.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Onde o conteúdo mora
 
-## Learn More
+| | Desenvolvimento | Produção |
+|---|---|---|
+| Conteúdo e acessos | `local-content/*.json` | Vercel Blob, store **privada** |
+| Imagens, GIFs e vídeos | `public/uploads` | Vercel Blob, store **pública** |
+| Login no painel | dispensado | obrigatório |
 
-To learn more about Next.js, take a look at the following resources:
+A escolha é automática: com `BLOB_CONTENT_TOKEN` e `BLOB_MEDIA_TOKEN` definidos,
+o projeto usa o Blob; sem eles, usa o disco.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+O conteúdo é lido da store privada com `useCache: false`. Sem isso, uma edição
+levaria até um minuto para aparecer no site por causa do cache do Blob.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Configurando produção
 
-## Deploy on Vercel
+1. Crie duas stores no painel da Vercel: uma **privada** (conteúdo) e uma
+   **pública** (mídia). O modo de acesso não pode ser alterado depois.
+2. Copie os tokens de leitura e escrita de cada uma para `BLOB_CONTENT_TOKEN` e
+   `BLOB_MEDIA_TOKEN`.
+3. Gere um `AUTH_SECRET`:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. Defina `ADMIN_EMAIL` e `ADMIN_PASSWORD` com o primeiro acesso.
+
+Veja `.env.local.example` para a lista completa.
+
+## Acesso ao painel
+
+`ADMIN_EMAIL` e `ADMIN_PASSWORD` valem apenas enquanto nenhum acesso tiver sido
+cadastrado: no primeiro login, esse par vira o primeiro administrador e as
+variáveis deixam de ter efeito. Dali em diante, os acessos são gerenciados na
+seção **Acessos** do painel, que permite cadastrar, trocar senha e remover.
+
+Detalhes de segurança: a senha é guardada como hash scrypt com sal aleatório, a
+sessão é um cookie `HttpOnly` assinado com HMAC e vale 7 dias, e ninguém pode
+remover o próprio acesso nem o último acesso existente.
+
+Sem `AUTH_SECRET`, o painel não abre em produção, porque não haveria como
+assinar a sessão com segurança.
+
+## Estrutura
+
+- `app/(site)/` páginas públicas
+- `app/admin/` painel de administração
+- `app/api/admin/` conteúdo, mídia, sessão e acessos
+- `components/` interface do site e do painel
+- `content/pages.ts` textos padrão de cada página
+- `content/defaults.ts` conteúdo inicial (projetos, áreas, eventos, ONGs, parceiros, equipe)
+- `lib/content.ts` leitura usada pelas páginas
+- `lib/contentStore.ts` armazenamento (Blob ou disco)
+- `lib/migrateContent.ts` normalização e compatibilidade com formatos antigos
+- `lib/auth.ts` senhas e sessão
+
+## Scripts
+
+```bash
+npm run dev     # ambiente de desenvolvimento
+npm run build   # build de produção (roda checagem de tipos)
+npm run start   # sobe o build de produção
+npm run lint    # eslint
+```

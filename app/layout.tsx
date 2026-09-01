@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { SanityLive } from "@/sanity/lib/live";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -30,7 +29,6 @@ export default function RootLayout({
     >
       <body className="h-full">
         {children}
-        <SanityLive />
       </body>
     </html>
   );

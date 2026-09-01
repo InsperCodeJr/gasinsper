@@ -9,7 +9,7 @@ export type SlideshowEvent = {
   title: string;
   description: string;
   date?: string | null;
-  slug: { current: string };
+  slug: string;
   cardColor?: string | null;
   imageUrl?: string | null;
 };
@@ -23,7 +23,13 @@ function formatDate(dateStr?: string | null) {
   });
 }
 
-export default function EventSlideshow({ events }: { events: SlideshowEvent[] }) {
+export default function EventSlideshow({
+  events,
+  hero,
+}: {
+  events: SlideshowEvent[];
+  hero: { eyebrow: string; title: string };
+}) {
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
 
@@ -78,10 +84,10 @@ export default function EventSlideshow({ events }: { events: SlideshowEvent[] })
       {/* Page header (static) */}
       <div className="relative mx-auto w-full max-w-7xl px-4 pt-20 sm:px-6 sm:pt-24 lg:px-8 lg:pt-28">
         <p className="animate-fade-in text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-          Nossos Eventos
+          {hero.eyebrow}
         </p>
         <h1 className="animate-fade-in-up delay-100 mt-4 max-w-2xl text-3xl font-black leading-tight text-white sm:text-4xl lg:text-5xl">
-          Onde o impacto se torna experiência
+          {hero.title}
         </h1>
       </div>
 
@@ -117,7 +123,7 @@ export default function EventSlideshow({ events }: { events: SlideshowEvent[] })
                       {ev.description}
                     </p>
                     <Link
-                      href={`/eventos/${ev.slug.current}`}
+                      href={`/eventos/${ev.slug}`}
                       className="mt-6 inline-flex items-center gap-2 rounded-xl border border-white/30 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:border-white hover:bg-white/10 hover:-translate-y-px active:translate-y-0"
                     >
                       Ver evento

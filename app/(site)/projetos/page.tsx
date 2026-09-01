@@ -1,12 +1,12 @@
 import Image from "next/image";
-import { getAllProjects } from "@/sanity/lib/queries";
-import { urlFor } from "@/sanity/lib/image";
-import { Project } from "@/types/sanity";
+import { getAllProjects, getPageContent } from "@/lib/content";
+import type { ProjectWithPartners } from "@/types/content";
 import ScrollReveal from "@/components/ScrollReveal";
+import HeroBackground from "@/components/HeroBackground";
 import CountUp from "@/components/CountUp";
 
 export default async function Projetos() {
-  const projects = await getAllProjects();
+  const [projects, page] = await Promise.all([getAllProjects(), getPageContent("projects")]);
 
   const allGalleryImages = projects.flatMap((p) =>
     (p.galleryImages ?? []).slice(0, 2).map((img) => ({ img, project: p.name }))
@@ -17,23 +17,25 @@ export default async function Projetos() {
 
       {/* ── HERO ─────────────────────────────────────── */}
       <section className="relative overflow-hidden border-b border-[#E5E5E5] bg-gradient-to-br from-[#1A060C] via-[#5C1926] to-[#1A060C] py-20 sm:py-24 lg:py-28 text-white">
-        <div />
+        <HeroBackground mediaUrl={page.hero.mediaUrl} />
         <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="animate-fade-in text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-            Nossas Iniciativas
+            {page.hero.eyebrow}
           </p>
           <h1 className="animate-fade-in-up delay-100 mt-4 max-w-3xl text-3xl font-black leading-tight sm:text-4xl lg:text-5xl">
-            Projetos que geram impacto real
+            {page.hero.title}
           </h1>
           <p className="animate-fade-in-up delay-200 mt-6 max-w-2xl text-base leading-7 text-white/70">
-            O GAS desenvolve {projects.length > 0 ? projects.length : "múltiplos"} projetos com escopos distintos — de educação financeira a empreendedorismo social — todos orientados por metodologia rigorosa e resultados mensuráveis.
+            {page.hero.intro}
           </p>
           <div className="animate-fade-in-up delay-300 mt-8 flex flex-wrap gap-6 text-sm text-white/50">
-            <span>{projects.length || "10"}+ projetos ativos</span>
-            <span>·</span>
-            <span>Múltiplas ONGs impactadas</span>
-            <span>·</span>
-            <span>Voluntários em todo o Brasil</span>
+            <span>{projects.length} projetos ativos</span>
+            {page.hero.highlights.map((highlight) => (
+              <span key={highlight} className="flex gap-6">
+                <span>·</span>
+                <span>{highlight}</span>
+              </span>
+            ))}
           </div>
         </div>
       </section>
@@ -45,7 +47,7 @@ export default async function Projetos() {
             {allGalleryImages.slice(0, 12).map(({ img, project }, i) => (
               <div key={i} className="relative aspect-square overflow-hidden rounded-lg bg-[#F7F7F7]">
                 <Image
-                  src={urlFor(img).width(400).height(400).fit("crop").url()}
+                  src={img}
                   alt={project}
                   fill
                   className="object-cover transition-all duration-500 hover:scale-110"
@@ -60,11 +62,11 @@ export default async function Projetos() {
       <section className="sticky top-16 z-40 border-b border-[#E5E5E5] bg-white/90 py-4 backdrop-blur-md">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* py-2 -my-2 px-2 -mx-2: espaço no padding para o scale não ser clipado pelo overflow-x:auto */}
-          <div className="flex flex-wrap gap-2 overflow-x-auto py-2 -my-2 px-2 -mx-2">
+          <div className="flex flex-wrap justify-center gap-2 overflow-x-auto py-2 -my-2 px-2 -mx-2">
             {projects.map((p) => (
               <a
                 key={p._id}
-                href={`#${p.slug.current}`}
+                href={`#${p.slug}`}
                 className="rounded-full border border-[#E5E5E5] bg-white px-4 py-1.5 text-xs font-semibold text-[#555] transition-all duration-200 hover:border-[#BB0A24] hover:text-[#BB0A24] hover:scale-105 hover:shadow-sm"
               >
                 {p.name}
@@ -77,7 +79,7 @@ export default async function Projetos() {
       {/* ── PROJETOS INDIVIDUAIS ─────────────────────── */}
       {projects.length === 0 ? (
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-          <p className="text-[#555555]">Os projetos serão cadastrados em breve no Sanity Studio.</p>
+          <p className="text-[#555555]">Nenhum projeto cadastrado ainda. Adicione os projetos no painel de administração.</p>
         </div>
       ) : (
         projects.map((project, index) => (
@@ -88,16 +90,14 @@ export default async function Projetos() {
   );
 }
 
-function ProjectSection({ project, reversed }: { project: Project; reversed: boolean }) {
+function ProjectSection({ project, reversed }: { project: ProjectWithPartners; reversed: boolean }) {
   const accent = project.cardColor ?? "#BB0A24";
   // Entradas incompletas no Sanity (sem label/valor) geravam cards vazios e quebravam a página.
   const stats = (project.stats ?? []).filter((s) => s?.value || s?.label);
-  const logoUrl = project.logo
-    ? urlFor(project.logo).width(900).height(675).fit("crop").url()
-    : null;
+  const logoUrl = project.logo ?? null;
 
   return (
-    <section id={project.slug.current} className="scroll-mt-28 border-b border-[#E5E5E5]">
+    <section id={project.slug} className="scroll-mt-28 border-b border-[#E5E5E5]">
 
       {/* ── Main grid: image + content ── */}
       <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:py-14 sm:px-6 lg:py-16 lg:px-8">
@@ -202,7 +202,7 @@ function ProjectSection({ project, reversed }: { project: Project; reversed: boo
               </p>
               <div className="flex flex-wrap items-center gap-8">
                 {project.partners.map((partner) => {
-                  const pLogo = partner.logo ? urlFor(partner.logo).height(60).url() : null;
+                  const pLogo = partner.logo ?? null;
                   return (
                     <div key={partner._id} className="flex flex-col items-center gap-1">
                       {pLogo ? (
@@ -236,9 +236,7 @@ function ProjectSection({ project, reversed }: { project: Project; reversed: boo
             </ScrollReveal>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {project.testimonials.map((t, i) => {
-                const photoUrl = t.photo
-                  ? urlFor(t.photo).width(80).height(80).fit("crop").url()
-                  : null;
+                const photoUrl = t.photo ?? null;
                 return (
                   <ScrollReveal key={i} direction="up" delay={i * 80}>
                     <div className="group h-full rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:-translate-y-0.5">

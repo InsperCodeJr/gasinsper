@@ -1,32 +1,15 @@
 import Image from "next/image";
-import { getAllAreas, getAllTeamMembers, getVideoUrl } from "@/sanity/lib/queries";
-import { urlFor } from "@/sanity/lib/image";
-import VideoHero from "@/components/VideoHero";
+import { getAllAreas, getAllTeamMembers, getPageContent } from "@/lib/content";
+import HeroMedia from "@/components/HeroMedia";
 import ScrollReveal from "@/components/ScrollReveal";
 
-const FALLBACK_AREAS = [
-  { _id: "a1", name: "Projetos Sociais", description: "Desenvolve e gerencia os projetos que atendem diretamente as ONGs parceiras e comunidades, coordenando equipes multidisciplinares para máximo impacto." },
-  { _id: "a2", name: "Parcerias e Relações", description: "Responsável por cultivar e expandir a rede de parceiros corporativos e institucionais que viabilizam as ações do GAS." },
-  { _id: "a3", name: "Gestão de Pessoas", description: "Cuida do recrutamento, desenvolvimento e engajamento dos membros, garantindo uma cultura organizacional forte e acolhedora." },
-  { _id: "a4", name: "Marketing e Comunicação", description: "Constrói e comunica a identidade do GAS, ampliando o alcance das iniciativas e fortalecendo a presença digital da organização." },
-];
-
-const VALUES = [
-  { title: "Impacto Real", description: "Cada ação é orientada por resultados concretos e mensuráveis para as comunidades que atendemos." },
-  { title: "Protagonismo", description: "Acreditamos no potencial transformador dos estudantes e incentivamos a liderança desde o início." },
-  { title: "Colaboração", description: "Construímos pontes entre pessoas, organizações e causas para multiplicar o impacto coletivo." },
-  { title: "Excelência", description: "Buscamos o mais alto padrão em tudo o que fazemos, com rigor técnico e comprometimento." },
-  { title: "Transparência", description: "Atuamos com honestidade e abertura em nossas relações com membros, parceiros e ONGs." },
-  { title: "Inovação Social", description: "Exploramos novos modelos e abordagens para resolver desafios sociais complexos." },
-];
-
 export default async function SobreNos() {
-  const [areas, teamMembers, videoUrl] = await Promise.all([
+  const [areas, teamMembers, page] = await Promise.all([
     getAllAreas(),
     getAllTeamMembers(),
-    getVideoUrl(),
+    getPageContent("about"),
   ]);
-  const displayAreas = areas.length >= 4 ? areas : FALLBACK_AREAS;
+  const displayAreas = areas;
   const matrixMembers = teamMembers.filter((m) => m.isMatrix);
   const areaMembers = teamMembers.filter((m) => !m.isMatrix);
 
@@ -34,28 +17,22 @@ export default async function SobreNos() {
     <div className="bg-white text-[#1A1A1A]">
 
       {/* ── HERO — Video ────────────────────────────── */}
-      <VideoHero videoUrl={videoUrl} />
+      <HeroMedia hero={page.hero} />
 
       {/* ── SOBRE A ORGANIZAÇÃO ─────────────────────── */}
       <section className="border-b border-[#E5E5E5] py-14 sm:py-16 lg:py-20">
         <div className="mx-auto grid w-full max-w-7xl gap-16 px-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8">
           <ScrollReveal direction="left">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-              Sobre a Organização
+              {page.about.eyebrow}
             </p>
             <h2 className="mt-4 text-3xl font-black leading-tight sm:text-4xl">
-              O que é o GAS?
+              {page.about.title}
             </h2>
             <div className="mt-6 space-y-4 text-base leading-7 text-[#555555]">
-              <p>
-                O <strong className="text-[#1A1A1A]">GAS — Grupo de Ação Social</strong> é uma organização estudantil do Insper dedicada ao desenvolvimento de projetos de impacto social. Fundado por estudantes, o GAS conecta o rigor acadêmico da formação em negócios e tecnologia com a urgência de causas sociais reais.
-              </p>
-              <p>
-                Atuamos em parceria com ONGs, empresas e comunidades para construir soluções que vão além do voluntariado pontual — criamos programas estruturados, de longo prazo, com metodologia, acompanhamento e métricas de impacto.
-              </p>
-              <p>
-                Cada projeto é uma oportunidade de aprendizado mútuo: nossos membros desenvolvem competências de liderança e gestão enquanto geram valor concreto para as organizações e pessoas que apoiamos.
-              </p>
+              {page.about.paragraphs.map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))}
             </div>
           </ScrollReveal>
 
@@ -80,16 +57,16 @@ export default async function SobreNos() {
             <div className="grid gap-12 lg:grid-cols-[1fr_2fr] lg:items-start">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-                  Nossa Missão
+                  {page.mission.eyebrow}
                 </p>
                 <div className="mt-4 h-0.5 w-12 bg-[#BB0A24]" />
               </div>
               <div>
                 <p className="text-xl font-light leading-relaxed text-white/85 sm:text-2xl lg:text-3xl">
-                  &ldquo;Formar líderes comprometidos com o impacto social, conectando talento estudantil a causas reais por meio de projetos estruturados e parcerias de longo prazo.&rdquo;
+                  &ldquo;{page.mission.quote}&rdquo;
                 </p>
                 <p className="mt-8 text-base leading-7 text-white/60">
-                  Acreditamos que a universidade é o momento ideal para desenvolver não apenas competências técnicas, mas também a consciência social e a capacidade de gerar mudança positiva no mundo.
+                  {page.mission.text}
                 </p>
               </div>
             </div>
@@ -102,13 +79,13 @@ export default async function SobreNos() {
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="none">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-              Nossos Valores
+              {page.values.eyebrow}
             </p>
-            <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">O que nos guia</h2>
+            <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">{page.values.title}</h2>
           </ScrollReveal>
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {VALUES.map((v, i) => (
+            {page.values.items.map((v, i) => (
               <ScrollReveal key={v.title} direction="up" delay={i * 70}>
                 <div className="group h-full rounded-2xl border border-[#E5E5E5] bg-white p-7 shadow-sm transition-all duration-300 hover:border-[#BB0A24]/20 hover:shadow-md hover:-translate-y-0.5">
                   <div className="h-0.5 w-8 bg-[#BB0A24] transition-all duration-300 group-hover:w-12" />
@@ -126,33 +103,26 @@ export default async function SobreNos() {
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="left">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-              Como Funcionamos
+              {page.structure.eyebrow}
             </p>
-            <h2 className="mt-4 text-3xl font-black sm:text-4xl">Estrutura Organizacional</h2>
-            <div className="mt-6 max-w-3xl text-base leading-7 text-[#555555]">
-              <p>
-                O GAS é estruturado em torno de uma <strong className="text-[#1A1A1A]">matriz</strong> — responsável pela governança, estratégia e coordenação geral — e quatro <strong className="text-[#1A1A1A]">áreas principais</strong>, cada uma com autonomia para desenvolver suas iniciativas dentro da missão da organização.
-              </p>
-              <p className="mt-4">
-                Essa estrutura garante agilidade operacional sem abrir mão do alinhamento estratégico, permitindo que o GAS atue em múltiplas frentes simultaneamente com consistência e qualidade.
-              </p>
-            </div>
+            <h2 className="mt-4 text-3xl font-black sm:text-4xl">{page.structure.title}</h2>
+            <p className="mt-6 max-w-3xl text-base leading-7 text-[#555555]">{page.structure.text}</p>
           </ScrollReveal>
         </div>
       </section>
 
-      {/* ── 4 ÁREAS ─────────────────────────────────── */}
+      {/* ── ÁREAS ───────────────────────────────────── */}
       <section id="areas" className="scroll-mt-20 border-b border-[#E5E5E5] py-14 sm:py-16 lg:py-20">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="none">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-              Nossas Áreas
+              {page.areas.eyebrow}
             </p>
-            <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">As 4 Áreas do GAS</h2>
+            <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">{page.areas.title}</h2>
           </ScrollReveal>
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
-            {displayAreas.slice(0, 4).map((area, i) => (
+            {displayAreas.map((area, i) => (
               <ScrollReveal key={area._id} direction="up" delay={i * 80}>
                 <div className="group h-full rounded-2xl border border-[#E5E5E5] bg-white p-8 shadow-sm transition-all duration-300 hover:border-[#BB0A24]/20 hover:shadow-md hover:-translate-y-0.5">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#BB0A24] text-sm font-black text-white transition-transform duration-300 group-hover:scale-110">
@@ -172,14 +142,14 @@ export default async function SobreNos() {
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="none">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-              Gestão 2026
+              {page.team.eyebrow}
             </p>
-            <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">Nossa Equipe</h2>
+            <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">{page.team.title}</h2>
           </ScrollReveal>
 
           {teamMembers.length === 0 ? (
             <p className="mt-8 text-[#555555]">
-              Os membros da gestão serão cadastrados em breve no Sanity Studio.
+              Nenhum membro da gestão cadastrado ainda. Adicione os membros no painel de administração.
             </p>
           ) : (
             <>
@@ -227,9 +197,7 @@ function MemberCard({
   member: Awaited<ReturnType<typeof getAllTeamMembers>>[number];
   showArea?: boolean;
 }) {
-  const photoUrl = member.photo
-    ? urlFor(member.photo).width(400).height(400).fit("crop").url()
-    : null;
+  const photoUrl = member.photo ?? null;
 
   return (
     <div className="group h-full overflow-hidden rounded-2xl border border-[#E5E5E5] bg-white shadow-sm transition-all duration-300 hover:border-[#BB0A24]/20 hover:shadow-md hover:-translate-y-0.5">

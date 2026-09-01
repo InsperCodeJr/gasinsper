@@ -142,6 +142,17 @@ export default function NavMenu({ projects }: NavMenuProps) {
         <ul className="flex items-center gap-7">
           <li>
             <Link
+              href="/"
+              className="group relative py-1 text-sm text-[#1A1A1A] transition-colors duration-200 hover:text-[#BB0A24]"
+            >
+              <span className="relative after:absolute after:-bottom-px after:left-0 after:h-px after:w-0 after:bg-[#BB0A24] after:transition-all after:duration-200 group-hover:after:w-full">
+                Início
+              </span>
+            </Link>
+          </li>
+
+          <li>
+            <Link
               href="/sobre-nos"
               className="group relative py-1 text-sm text-[#1A1A1A] transition-colors duration-200 hover:text-[#BB0A24]"
             >
@@ -233,6 +244,17 @@ export default function NavMenu({ projects }: NavMenuProps) {
           aria-label="Menu mobile"
         >
           <ul className="divide-y divide-[#F5F5F5]">
+
+            {/* Início */}
+            <li>
+              <Link
+                href="/"
+                className="flex min-h-[52px] items-center px-5 text-sm font-semibold text-[#1A1A1A] transition-colors hover:text-[#BB0A24] active:bg-[#F9F9F9]"
+                onClick={() => setMobileOpen(false)}
+              >
+                Início
+              </Link>
+            </li>
 
             {/* Sobre Nós */}
             <li>

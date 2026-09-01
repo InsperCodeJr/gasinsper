@@ -8,7 +8,7 @@ export type CarouselProject = {
   _id: string;
   name: string;
   description: string;
-  slug: { current: string };
+  slug: string;
   cardColor?: string | null;
   imageUrl?: string | null;
 };
@@ -62,7 +62,7 @@ export default function ProjectCarousel({ projects }: { projects: CarouselProjec
               className="w-[80vw] max-w-xs sm:w-64 lg:w-80 flex-shrink-0 snap-start"
             >
               <Link
-                href={`/projetos#${project.slug.current}`}
+                href={`/projetos#${project.slug}`}
                 className="group relative block overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-500"
               >
                 <div className="relative aspect-[4/3]"
@@ -106,10 +106,15 @@ export default function ProjectCarousel({ projects }: { projects: CarouselProjec
                         className="mt-0 flex items-center gap-1 text-xs font-semibold opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:mt-3"
                         style={{ color: accent }}
                       >
-                        Ver projeto{" "}
-                        <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">
-                          →
-                        </span>
+                        Ver projeto
+                        <svg
+                          className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
                       </div>
                     </div>
                   </div>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getSiteSettings } from "@/sanity/lib/queries";
+import { getSiteSettings } from "@/lib/content";
 
 const quickLinks = [
   { href: "/sobre-nos", label: "Sobre Nós" },
@@ -37,7 +37,7 @@ function IconMail({ className }: { className?: string }) {
 
 export default async function Footer() {
   const siteSettings = await getSiteSettings();
-  const instagramHandle = siteSettings.instagramHandle ?? "gas.insper";
+  const instagramHandle = siteSettings.instagramHandle ?? "gasinsper";
   const linkedinUrl = siteSettings.linkedinUrl ?? "https://linkedin.com";
   const contactEmail = siteSettings.contactEmail ?? "contato@gas.org.br";
 
@@ -64,7 +64,7 @@ export default async function Footer() {
             </Link>
 
             <p className="mt-4 max-w-xs text-sm leading-6 text-white/50">
-              Grupo de Ação Social — organização estudantil do Insper dedicada ao impacto social por meio de projetos estruturados e parcerias de longo prazo.
+              Grupo de Ação Social, organização estudantil do Insper dedicada ao impacto social por meio de projetos estruturados e parcerias de longo prazo.
             </p>
 
             {/* Social icons */}
@@ -124,7 +124,7 @@ export default async function Footer() {
                 </a>
               </li>
               <li className="pt-1 text-xs text-white/25">
-                São Paulo, SP — Insper
+                Insper, São Paulo, SP
               </li>
             </ul>
           </div>
@@ -153,7 +153,7 @@ export default async function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-white/8 px-4 py-4 sm:px-6 lg:px-8">
         <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-2 text-xs text-white/25">
-          <span>© {new Date().getFullYear()} GAS — Grupo de Ação Social. Todos os direitos reservados.</span>
+          <span>© {new Date().getFullYear()} GAS, Grupo de Ação Social. Todos os direitos reservados.</span>
           <span>Insper · São Paulo, Brasil</span>
         </div>
       </div>

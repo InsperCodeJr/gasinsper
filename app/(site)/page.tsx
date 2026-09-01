@@ -1,46 +1,27 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { getAllProjects, getHomeImpactNumbers } from "@/sanity/lib/queries";
-import { urlFor } from "@/sanity/lib/image";
+import { getAllProjects, getHomeImpactNumbers, getPageContent } from "@/lib/content";
 import ScrollReveal from "@/components/ScrollReveal";
 import CountUp from "@/components/CountUp";
 import ParallaxBackground from "@/components/ParallaxBackground";
 import ProjectCarousel from "@/components/ProjectCarousel";
-
-const FALLBACK_PROJECTS = [
-  { id: "mentoria", name: "Mentoria Social", description: "Capacitação e acompanhamento de jovens para desenvolvimento acadêmico e profissional." },
-  { id: "educacao-financeira", name: "Educação Financeira", description: "Workshops e oficinas para fortalecer autonomia financeira de comunidades atendidas." },
-  { id: "empreendedorismo", name: "Empreendedorismo Local", description: "Apoio prático para pequenos empreendedores sociais estruturarem suas iniciativas." },
-];
+import HeroBackground from "@/components/HeroBackground";
 
 export default async function Home() {
-  const [projects, impactNumbers] = await Promise.all([
+  const [projects, impactNumbers, page] = await Promise.all([
     getAllProjects(),
     getHomeImpactNumbers(),
+    getPageContent("home"),
   ]);
-  const featuredProjects = projects.slice(0, 6);
-  const hasProjects = featuredProjects.length > 0;
-
-  const carouselProjects = hasProjects
-    ? featuredProjects.map((p) => ({
-        _id: p._id,
-        name: p.name,
-        description: p.description,
-        slug: p.slug,
-        cardColor: p.cardColor ?? null,
-        imageUrl: p.logo
-          ? urlFor(p.logo).width(700).height(525).fit("crop").url()
-          : null,
-      }))
-    : FALLBACK_PROJECTS.map((p) => ({
-        _id: p.id,
-        name: p.name,
-        description: p.description,
-        slug: { current: p.id },
-        cardColor: null,
-        imageUrl: null,
-      }));
+  const carouselProjects = projects.slice(0, 6).map((p) => ({
+    _id: p._id,
+    name: p.name,
+    description: p.description,
+    slug: p.slug,
+    cardColor: p.cardColor ?? null,
+    imageUrl: p.logo ?? null,
+  }));
 
   return (
     <div className="bg-white text-[#1A1A1A]">
@@ -48,39 +29,45 @@ export default async function Home() {
       {/* ═══ HERO ═══════════════════════════════════════ */}
       <section className="relative overflow-hidden border-b border-[#E5E5E5]">
         <ParallaxBackground speed={0.28}>
-          <Image src="/insper.jpg" alt="" fill priority className="object-cover" />
-          <div className="absolute inset-0 bg-[#1A1A1A]/65" />
+          {page.hero.mediaUrl ? (
+            <HeroBackground mediaUrl={page.hero.mediaUrl} overlayClassName="bg-[#1A1A1A]/65" />
+          ) : (
+            <>
+              <Image src="/insper.jpg" alt="" fill priority className="object-cover" />
+              <div className="absolute inset-0 bg-[#1A1A1A]/65" />
+            </>
+          )}
         </ParallaxBackground>
 
         <div className="relative mx-auto w-full max-w-7xl px-4 pb-16 pt-20 sm:pb-20 sm:pt-24 sm:px-6 lg:pb-28 lg:pt-32 lg:px-8">
           <p className="animate-fade-in text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-            Grupo de Ação Social · Insper
+            {page.hero.eyebrow}
           </p>
           <h1 className="animate-fade-in-up delay-100 mt-4 max-w-4xl text-3xl font-black leading-[1.08] text-white sm:text-5xl lg:text-7xl">
-            Potencial estudantil.<br />
-            <span className="text-[#BB0A24]">Impacto real.</span>
+            {page.hero.titleTop}<br />
+            <span className="text-[#BB0A24]">{page.hero.titleHighlight}</span>
           </h1>
           <p className="animate-fade-in-up delay-200 mt-5 max-w-2xl text-base leading-7 text-white/70 sm:mt-7 sm:text-lg">
-            O GAS conecta estudantes excepcionais a causas sociais urgentes, construindo projetos de longo prazo com ONGs e parceiros que geram transformação mensurada.
+            {page.hero.subtitle}
           </p>
           <div className="animate-fade-in-up delay-300 mt-8 flex flex-wrap gap-3 sm:mt-10 sm:gap-4">
             <Link
               href="/sobre-nos"
               className="inline-flex items-center border border-white/30 px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:border-white hover:bg-white/10 hover:-translate-y-px active:translate-y-0 sm:px-7 sm:py-3.5"
             >
-              Conheça o GAS
+              {page.hero.ctaAbout}
             </Link>
             <Link
               href="/projetos"
               className="inline-flex items-center border border-[#BB0A24] bg-[#BB0A24] px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#8F071B] hover:border-[#8F071B] hover:-translate-y-px active:translate-y-0 sm:px-7 sm:py-3.5"
             >
-              Ver Projetos
+              {page.hero.ctaProjects}
             </Link>
             <Link
               href="/parceiros"
               className="inline-flex items-center border border-white/30 px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:border-white hover:bg-white/10 hover:-translate-y-px active:translate-y-0 sm:px-7 sm:py-3.5"
             >
-              Parceiros
+              {page.hero.ctaPartners}
             </Link>
           </div>
         </div>
@@ -91,19 +78,19 @@ export default async function Home() {
         <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-0 lg:px-8">
           <ScrollReveal direction="left" className="border-b border-[#E5E5E5] pb-10 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-12">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-              Sobre o GAS
+              {page.about.eyebrow}
             </p>
             <h2 className="mt-4 text-2xl font-black leading-tight sm:text-3xl lg:text-4xl">
-              Formação, estratégia e ação para ampliar o impacto social.
+              {page.about.title}
             </h2>
             <p className="mt-5 text-base leading-7 text-[#555555]">
-              O GAS é uma organização estudantil que desenvolve projetos sociais com foco em impacto consistente. Atuamos lado a lado com ONGs e parceiros para construir soluções que geram valor real para comunidades e aceleram o desenvolvimento de nossos membros.
+              {page.about.text}
             </p>
             <Link
               href="/sobre-nos"
               className="group mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#BB0A24] hover:underline"
             >
-              Conhecer nossa história
+              {page.about.linkLabel}
               <svg className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
@@ -112,19 +99,14 @@ export default async function Home() {
 
           <ScrollReveal direction="right" delay={120} className="lg:pl-12">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#555555]">
-              Nossa Visão
+              {page.vision.eyebrow}
             </p>
             <div className="mt-4 h-0.5 w-8 bg-[#BB0A24]" />
             <p className="mt-5 text-lg font-light leading-relaxed text-[#1A1A1A] sm:text-xl">
-              &ldquo;Ser referência em protagonismo estudantil e transformação social, conectando talento, gestão e propósito em iniciativas de alto impacto.&rdquo;
+              &ldquo;{page.vision.quote}&rdquo;
             </p>
             <div className="mt-8 grid grid-cols-2 gap-4 sm:gap-6">
-              {[
-                { label: "Estrutura", value: "Matriz + 4 Áreas" },
-                { label: "Atuação", value: "Semestral" },
-                { label: "Foco", value: "Impacto Mensurável" },
-                { label: "Origem", value: "Insper, São Paulo" },
-              ].map((item) => (
+              {page.vision.facts.map((item) => (
                 <div key={item.label} className="group">
                   <p className="text-xs font-semibold uppercase tracking-wider text-[#555555]">{item.label}</p>
                   <p className="mt-1 font-bold transition-colors duration-200 group-hover:text-[#BB0A24]">{item.value}</p>
@@ -140,10 +122,10 @@ export default async function Home() {
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="none" className="text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-              Nossos Números
+              {page.numbers.eyebrow}
             </p>
             <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">
-              Impacto que se mede
+              {page.numbers.title}
             </h2>
           </ScrollReveal>
 
@@ -172,17 +154,17 @@ export default async function Home() {
           <ScrollReveal direction="none" className="flex flex-wrap items-end justify-between gap-4 border-b border-[#E5E5E5] pb-7 sm:pb-8">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#BB0A24]">
-                Nossos Projetos
+                {page.projects.eyebrow}
               </p>
               <h2 className="mt-3 text-2xl font-black sm:text-3xl lg:text-4xl">
-                Iniciativas que geram resultado.
+                {page.projects.title}
               </h2>
             </div>
             <Link
               href="/projetos"
               className="group inline-flex items-center gap-1.5 text-sm font-semibold text-[#1A1A1A] underline hover:text-[#BB0A24] transition-colors"
             >
-              Ver todos
+              {page.projects.linkLabel}
               <svg className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
@@ -200,13 +182,13 @@ export default async function Home() {
         <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8">
           <ScrollReveal direction="left">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-white/60">
-              Junte-se a Nós
+              {page.cta.eyebrow}
             </p>
             <h2 className="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl">
-              Pronto para fazer parte do GAS?
+              {page.cta.title}
             </h2>
             <p className="mt-4 text-base leading-7 text-white/80 sm:mt-5">
-              Seja como membro da organização ou voluntário em nossos projetos, há um espaço para você contribuir e crescer.
+              {page.cta.text}
             </p>
           </ScrollReveal>
           <ScrollReveal direction="right" delay={120} className="flex flex-col gap-3 sm:gap-4 lg:items-end">
@@ -214,19 +196,19 @@ export default async function Home() {
               href="/como-fazer-parte#membro"
               className="inline-flex items-center justify-center rounded-xl border border-white bg-white px-6 py-3.5 text-sm font-semibold text-[#BB0A24] transition-all duration-200 hover:bg-white/90 hover:-translate-y-px active:translate-y-0 sm:px-7"
             >
-              Quero ser Membro
+              {page.cta.memberLabel}
             </Link>
             <Link
               href="/como-fazer-parte#voluntario"
               className="inline-flex items-center justify-center rounded-xl border border-white/40 px-6 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:border-white hover:bg-white/10 hover:-translate-y-px active:translate-y-0 sm:px-7"
             >
-              Quero ser Voluntário
+              {page.cta.volunteerLabel}
             </Link>
             <Link
               href="/parceiros"
               className="inline-flex items-center justify-center rounded-xl border border-white/40 px-6 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:border-white hover:bg-white/10 hover:-translate-y-px active:translate-y-0 sm:px-7"
             >
-              Virar Parceiro
+              {page.cta.partnerLabel}
             </Link>
           </ScrollReveal>
         </div>
