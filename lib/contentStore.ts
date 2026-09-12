@@ -29,8 +29,14 @@ export const LOCAL_CONTENT_FILE = path.join(LOCAL_CONTENT_DIR, CONTENT_KEY)
 export const LOCAL_USERS_FILE = path.join(LOCAL_CONTENT_DIR, USERS_KEY)
 export const LOCAL_UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads')
 
-const contentToken = process.env.BLOB_CONTENT_TOKEN
-const mediaToken = process.env.BLOB_MEDIA_TOKEN
+/**
+ * Ao conectar uma store, a Vercel cria sozinha a variavel
+ * <PREFIXO>_READ_WRITE_TOKEN. Usando os prefixos BLOB_CONTENT e BLOB_MEDIA,
+ * nada precisa ser copiado na mao. Os nomes curtos ficam aceitos para quem
+ * preferir definir a variavel manualmente.
+ */
+const contentToken = process.env.BLOB_CONTENT_READ_WRITE_TOKEN ?? process.env.BLOB_CONTENT_TOKEN
+const mediaToken = process.env.BLOB_MEDIA_READ_WRITE_TOKEN ?? process.env.BLOB_MEDIA_TOKEN
 
 /** Em Blob quando as duas stores estao configuradas; senao, disco local. */
 export function usesBlob(): boolean {

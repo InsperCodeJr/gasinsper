@@ -24,8 +24,9 @@ painel abre direto, sem login. Os dois diretórios ficam fora do Git.
 | Imagens, GIFs e vídeos | `public/uploads` | Vercel Blob, store **pública** |
 | Login no painel | dispensado | obrigatório |
 
-A escolha é automática: com `BLOB_CONTENT_TOKEN` e `BLOB_MEDIA_TOKEN` definidos,
-o projeto usa o Blob; sem eles, usa o disco.
+A escolha é automática: com `BLOB_CONTENT_READ_WRITE_TOKEN` e
+`BLOB_MEDIA_READ_WRITE_TOKEN` definidos, o projeto usa o Blob; sem eles, usa o disco.
+Essas duas variáveis são criadas pela própria Vercel ao conectar as stores.
 
 O conteúdo é lido da store privada com `useCache: false`. Sem isso, uma edição
 levaria até um minuto para aparecer no site por causa do cache do Blob.
@@ -34,8 +35,9 @@ levaria até um minuto para aparecer no site por causa do cache do Blob.
 
 1. Crie duas stores no painel da Vercel: uma **privada** (conteúdo) e uma
    **pública** (mídia). O modo de acesso não pode ser alterado depois.
-2. Copie os tokens de leitura e escrita de cada uma para `BLOB_CONTENT_TOKEN` e
-   `BLOB_MEDIA_TOKEN`.
+2. Ao conectar cada store ao projeto, informe o prefixo de variável: `BLOB_CONTENT`
+   para a privada e `BLOB_MEDIA` para a pública. A Vercel cria sozinha os tokens;
+   não é preciso copiar nada.
 3. Gere um `AUTH_SECRET`:
 
 ```bash
