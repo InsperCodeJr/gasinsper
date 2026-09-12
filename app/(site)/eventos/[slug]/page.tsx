@@ -1,12 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getAllEvents, getEventBySlug } from "@/lib/content";
-
-export async function generateStaticParams() {
-  const events = await getAllEvents();
-  return events.map((ev) => ({ slug: ev.slug }));
-}
+import { getEventBySlug } from "@/lib/content";
 
 function formatDate(dateStr?: string | null) {
   if (!dateStr) return null;

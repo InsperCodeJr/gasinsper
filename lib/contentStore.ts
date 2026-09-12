@@ -12,6 +12,8 @@
  *
  * Este modulo usa fs e o SDK do Blob: so pode ser importado no servidor.
  */
+import { cache } from 'react'
+
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
@@ -141,10 +143,14 @@ function isNotFound(error: unknown): boolean {
 
 /* ── Conteudo ────────────────────────────────────────── */
 
-export async function readContent(): Promise<SiteContent> {
+/**
+ * Uma pagina chama varios getters; com cache() o armazenamento e lido uma vez
+ * por requisicao, e nao uma vez por getter.
+ */
+export const readContent = cache(async (): Promise<SiteContent> => {
   const raw = await readJson<unknown>(CONTENT_KEY, null)
   return migrateContent(raw)
-}
+})
 
 export async function writeContent(content: unknown): Promise<SiteContent> {
   const normalized = migrateContent(content)
