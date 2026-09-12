@@ -2,6 +2,17 @@
 
 import { useState } from "react";
 
+/** Le a mensagem de erro mesmo quando o servidor responde HTML em vez de JSON. */
+async function errorMessageOf(res: Response): Promise<string> {
+  try {
+    const json = (await res.json()) as { error?: string };
+    if (json?.error) return json.error;
+  } catch {
+    // resposta sem JSON: cai na mensagem generica abaixo
+  }
+  return ;
+}
+
 /** Tela de entrada do painel. */
 export default function AdminLogin({ onSignedIn }: { onSignedIn: () => void }) {
   const [email, setEmail] = useState("");
@@ -20,8 +31,7 @@ export default function AdminLogin({ onSignedIn }: { onSignedIn: () => void }) {
         body: JSON.stringify({ email, password }),
       });
       if (!res.ok) {
-        const json = (await res.json()) as { error?: string };
-        throw new Error(json.error ?? "Não foi possível entrar.");
+        throw new Error(await errorMessageOf(res));
       }
       onSignedIn();
     } catch (e) {
