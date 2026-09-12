@@ -10,7 +10,7 @@ async function errorMessageOf(res: Response): Promise<string> {
   } catch {
     // resposta sem JSON: cai na mensagem generica abaixo
   }
-  return ;
+  return `Não foi possível entrar (erro ${res.status}).`;
 }
 
 /** Tela de entrada do painel. */
