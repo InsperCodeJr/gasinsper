@@ -31,20 +31,60 @@ export const LOCAL_UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads')
 
 /**
  * Ao conectar uma store, a Vercel cria sozinha a variavel
- * <PREFIXO>_READ_WRITE_TOKEN. Usando os prefixos BLOB_CONTENT e BLOB_MEDIA,
- * nada precisa ser copiado na mao. Os nomes curtos ficam aceitos para quem
- * preferir definir a variavel manualmente.
+ * <PREFIXO>_READ_WRITE_TOKEN. Como o prefixo escolhido no painel varia, todas
+ * as grafias abaixo sao aceitas.
+ *
+ * A leitura acontece dentro da funcao, a cada chamada: lida no topo do modulo,
+ * a variavel pode ser capturada no build, antes de existir no ambiente.
  */
-const contentToken = process.env.BLOB_CONTENT_READ_WRITE_TOKEN ?? process.env.BLOB_CONTENT_TOKEN
-const mediaToken = process.env.BLOB_MEDIA_READ_WRITE_TOKEN ?? process.env.BLOB_MEDIA_TOKEN
+function tokenFor(prefix: 'BLOB_CONTENT' | 'BLOB_MEDIA'): string | undefined {
+  return (
+    process.env[`${prefix}_READ_WRITE_TOKEN`] ??
+    process.env[`${prefix}_TOKEN_READ_WRITE_TOKEN`] ??
+    process.env[`${prefix}_TOKEN`]
+  )
+}
+
+const contentToken = () => tokenFor('BLOB_CONTENT')
+const mediaToken = () => tokenFor('BLOB_MEDIA')
 
 /** Em Blob quando as duas stores estao configuradas; senao, disco local. */
 export function usesBlob(): boolean {
-  return Boolean(contentToken && mediaToken)
+  return Boolean(contentToken() && mediaToken())
 }
 
 export function storageMode(): 'blob' | 'local' {
   return usesBlob() ? 'blob' : 'local'
+}
+
+/**
+ * Fora de desenvolvimento o disco e somente leitura, entao cair no modo local
+ * significa configuracao faltando. Melhor dizer isso do que estourar um ENOENT.
+ */
+function assertWritable(): void {
+  if (usesBlob() || process.env.NODE_ENV !== 'production') return
+
+  const faltando = [
+    contentToken() ? null : 'BLOB_CONTENT_READ_WRITE_TOKEN (store privada)',
+    mediaToken() ? null : 'BLOB_MEDIA_READ_WRITE_TOKEN (store pública)',
+  ].filter(Boolean)
+
+  throw new Error(
+    `Armazenamento não configurado neste ambiente. Falta: ${faltando.join(' e ')}. ` +
+      'Conecte as stores do Vercel Blob ao projeto e faça um novo deploy.'
+  )
+}
+
+/** Diagnostico do painel: quais variaveis o servidor esta enxergando. */
+export function storageDiagnostics() {
+  return {
+    mode: storageMode(),
+    contentToken: Boolean(contentToken()),
+    mediaToken: Boolean(mediaToken()),
+    blobVars: Object.keys(process.env)
+      .filter((name) => name.startsWith('BLOB_'))
+      .sort(),
+  }
 }
 
 /* ── JSON na store privada ───────────────────────────── */
@@ -53,7 +93,7 @@ async function readJson<T>(key: string, fallback: T): Promise<T> {
   if (usesBlob()) {
     try {
       // useCache: false garante que o painel leia o que acabou de gravar.
-      const blob = await get(key, { access: 'private', token: contentToken, useCache: false })
+      const blob = await get(key, { access: 'private', token: contentToken(), useCache: false })
       if (!blob?.stream) return fallback
       return JSON.parse(await new Response(blob.stream).text()) as T
     } catch (error) {
@@ -74,12 +114,14 @@ async function readJson<T>(key: string, fallback: T): Promise<T> {
 }
 
 async function writeJson(key: string, value: unknown): Promise<void> {
+  assertWritable()
+
   const body = `${JSON.stringify(value, null, 2)}\n`
 
   if (usesBlob()) {
     await put(key, body, {
       access: 'private',
-      token: contentToken,
+      token: contentToken(),
       contentType: 'application/json',
       allowOverwrite: true,
       // Sem cache: o conteudo muda a cada gravacao e e lido pelo servidor.
@@ -138,10 +180,12 @@ export async function uploadMedia(
   body: Buffer,
   contentType: string
 ): Promise<UploadedMedia> {
+  assertWritable()
+
   if (usesBlob()) {
     const blob = await put(`uploads/${fileName}`, body, {
       access: 'public',
-      token: mediaToken,
+      token: mediaToken(),
       contentType,
       addRandomSuffix: false,
       allowOverwrite: true,
@@ -156,7 +200,7 @@ export async function uploadMedia(
 
 export async function listMedia(): Promise<UploadedMedia[]> {
   if (usesBlob()) {
-    const { blobs } = await list({ prefix: 'uploads/', token: mediaToken })
+    const { blobs } = await list({ prefix: 'uploads/', token: mediaToken() })
     return blobs.map((blob) => ({ url: blob.url, pathname: blob.pathname }))
   }
 
@@ -170,7 +214,7 @@ export async function listMedia(): Promise<UploadedMedia[]> {
 
 export async function deleteMedia(url: string): Promise<void> {
   if (usesBlob()) {
-    await del(url, { token: mediaToken })
+    await del(url, { token: mediaToken() })
     return
   }
 

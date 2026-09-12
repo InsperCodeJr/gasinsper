@@ -1,9 +1,10 @@
 /** Login e logout do painel. */
 import { SESSION_COOKIE, SESSION_MAX_AGE, authenticate, createSession, isAuthConfigured } from '@/lib/auth'
+import { storageDiagnostics } from '@/lib/contentStore'
 import { getAccess } from '@/lib/session'
 
 export async function GET() {
-  return Response.json(await getAccess())
+  return Response.json({ ...(await getAccess()), storage: storageDiagnostics() })
 }
 
 export async function POST(request: Request) {
@@ -27,7 +28,19 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Informe e-mail e senha.' }, { status: 400 })
   }
 
-  const user = await authenticate(email, password)
+  let user
+  try {
+    user = await authenticate(email, password)
+  } catch (error) {
+    // Erro de configuracao (ex: armazenamento ausente) precisa chegar legivel
+    // ao painel, senao o navegador recebe uma pagina de erro em HTML.
+    console.error('[auth] falha ao autenticar:', error)
+    return Response.json(
+      { error: error instanceof Error ? error.message : 'Falha ao entrar.' },
+      { status: 500 }
+    )
+  }
+
   if (!user) {
     // Mesma mensagem para e-mail inexistente e senha errada.
     return Response.json({ error: 'E-mail ou senha incorretos.' }, { status: 401 })
