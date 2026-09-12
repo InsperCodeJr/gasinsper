@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import AdminLogin from "./AdminLogin";
@@ -12,6 +13,27 @@ import { SECTIONS, type Field, type Panel, type Row } from "./adminSchema";
    pela API /api/admin/*, que decide entre Vercel Blob
    (produção) e arquivos locais (desenvolvimento).
    ───────────────────────────────────────────────────────── */
+
+/** Marca do painel, igual a do topo do site. */
+function Brand({ compact = false }: { compact?: boolean }) {
+  return (
+    <div className="flex items-center gap-2">
+      <Image
+        src="/logo.png"
+        alt="Logo do GAS"
+        width={32}
+        height={32}
+        className={`object-contain ${compact ? "h-7 w-7" : "h-8 w-8"}`}
+        priority
+      />
+      <span
+        className={`font-black tracking-tight text-[#1A1A1A] ${compact ? "text-base" : "text-lg"}`}
+      >
+        GAS
+      </span>
+    </div>
+  );
+}
 
 /* ── acesso por caminho ("pages.home", "slug.current") ─ */
 
@@ -883,9 +905,9 @@ export default function AdminPanel() {
         {/* ── Sidebar (desktop) ───────────────────────── */}
         <aside className="hidden border-r border-[#E4E4E7] bg-white lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col">
           <div className="border-b border-[#E4E4E7] px-5 py-5">
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#BB0A24]">Admin local</p>
+            <Brand />
             <p className="mt-1.5 text-xs leading-5 text-[#71717A]">
-              Uma seção por página do site. Edita <code className="text-[#52525B]">local-content/content.json</code>.
+              Uma seção por página do site.
             </p>
           </div>
           <div className="flex-1 overflow-y-auto p-3">{nav}</div>
@@ -1009,7 +1031,7 @@ export default function AdminPanel() {
           />
           <div className="absolute inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col bg-white shadow-xl">
             <div className="flex items-center justify-between border-b border-[#E4E4E7] px-5 py-4">
-              <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#BB0A24]">Admin local</p>
+              <Brand compact />
               <button type="button" onClick={() => setMenuOpen(false)} className="text-sm text-[#71717A]">
                 Fechar
               </button>
