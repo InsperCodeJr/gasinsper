@@ -854,23 +854,6 @@ export default function AdminPanel() {
       >
         Acessos
       </button>
-
-      <div className="my-2 border-t border-[#F4F4F5]" />
-
-      <button
-        type="button"
-        onClick={() => {
-          setActiveSection(ACCESS_SECTION);
-          setMenuOpen(false);
-        }}
-        className={`rounded-lg px-3 py-2 text-left text-sm transition ${
-          activeSection === ACCESS_SECTION
-            ? "bg-[#BB0A24] font-semibold text-white"
-            : "text-[#52525B] hover:bg-[#F4F4F5] hover:text-[#18181B]"
-        }`}
-      >
-        Acessos
-      </button>
     </nav>
   );
 
